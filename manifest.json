@@ -1,0 +1,42 @@
+{
+  "name": "Pyhub – Python Reference & Workshop",
+  "short_name": "Pyhub",
+  "description": "Complete Python reference with offline support and interactive workshop. Learn Python commands, write code, and test your skills.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a14",
+  "theme_color": "#0a0a14",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "reference", "programming"],
+  "lang": "en",
+  "shortcuts": [
+    {
+      "name": "Online Workshop",
+      "short_name": "Workshop",
+      "description": "Open the interactive Python workshop",
+      "url": "index_online.html",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Offline Reference",
+      "short_name": "Reference",
+      "description": "Browse Python commands offline",
+      "url": "index_offline.html",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

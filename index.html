@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Pyhub · Python Reference & Workshop</title>
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0a0a14" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        :root {
+            --neon-green: #00ff88;
+            --neon-green-dim: rgba(0, 255, 136, 0.10);
+            --neon-green-glow: rgba(0, 255, 136, 0.15);
+            --neon-green-strong: rgba(0, 255, 136, 0.25);
+            --neon-red: #ff2255;
+            --neon-red-dim: rgba(255, 34, 85, 0.10);
+            --neon-blue: #4fc3f7;
+            --neon-blue-dim: rgba(79, 195, 247, 0.08);
+            --gold: #ffd700;
+            --gold-dim: rgba(255, 215, 0, 0.10);
+            --gold-glow: rgba(255, 215, 0, 0.12);
+            --bg: #0a0a14;
+            --card: rgba(16, 16, 28, 0.94);
+            --card-hover: rgba(20, 20, 36, 0.96);
+            --border: rgba(0, 255, 136, 0.07);
+            --border-strong: rgba(0, 255, 136, 0.15);
+            --text: #e8e8f0;
+            --text-dim: rgba(232, 232, 240, 0.35);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --radius-xs: 8px;
+            --font: 'Inter', system-ui, -apple-system, sans-serif;
+            --shadow-glow: 0 0 60px rgba(0, 255, 136, 0.05);
+            --transition: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 0 12px 40px 12px;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.02), transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(79, 195, 247, 0.02), transparent 40%);
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #10101a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-green);
+            border-radius: 10px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 24px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            backdrop-filter: blur(14px);
+            margin: 12px 0 18px 0;
+            flex-wrap: wrap;
+            gap: 10px;
+            position: relative;
+        }
+        .header .logo {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--neon-green);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .header .logo .badge {
+            background: var(--neon-green);
+            color: #0a0a14;
+            font-size: 0.5rem;
+            padding: 1px 12px;
+            border-radius: 20px;
+            font-weight: 900;
+        }
+        .header .logo .version {
+            background: var(--gold-dim);
+            color: var(--gold);
+            font-size: 0.45rem;
+            padding: 1px 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        .header .setup-badge {
+            background: var(--neon-blue);
+            color: #0a0a14;
+            font-size: 0.55rem;
+            padding: 3px 16px;
+            border-radius: 20px;
+            font-weight: 900;
+            letter-spacing: 0.3px;
+        }
+        .header .nav-links {
+            display: flex;
+            gap: 6px 16px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .header .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.75rem;
+            padding: 4px 14px;
+            border-radius: 20px;
+            transition: 0.3s;
+            border: 1px solid transparent;
+        }
+        .header .nav-links a:hover {
+            color: var(--text);
+            border-color: var(--border);
+        }
+        .header .nav-links a.green {
+            color: var(--neon-green);
+            border-color: rgba(0, 255, 136, 0.1);
+            background: var(--neon-green-dim);
+        }
+        .header .nav-links a.gold {
+            color: var(--gold);
+            border-color: rgba(255, 215, 0, 0.1);
+            background: var(--gold-dim);
+        }
+        .header .nav-links a.etsy {
+            color: #f16521;
+            border-color: rgba(241, 101, 33, 0.15);
+            background: rgba(241, 101, 33, 0.06);
+        }
+        .header .nav-links a.telegram {
+            color: #27a7e7;
+            border-color: rgba(39, 167, 231, 0.15);
+            background: rgba(39, 167, 231, 0.06);
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            text-align: center;
+            padding: 48px 24px 36px 24px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            backdrop-filter: blur(14px);
+            margin-bottom: 22px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            left: -20%;
+            width: 140%;
+            height: 140%;
+            background: radial-gradient(circle at 30% 40%, rgba(0, 255, 136, 0.05), transparent 70%);
+            animation: heroGlow 14s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+        @keyframes heroGlow {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.4;
+            }
+            100% {
+                transform: translate(8%, 12%) scale(1.2);
+                opacity: 1;
+            }
+        }
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1.2;
+            position: relative;
+        }
+        .hero h1 .green {
+            color: var(--neon-green);
+            text-shadow: 0 0 40px rgba(0, 255, 136, 0.2);
+        }
+        .hero h1 .gold {
+            color: var(--gold);
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.15);
+        }
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin: 8px auto 18px auto;
+            line-height: 1.8;
+            position: relative;
+        }
+        .hero .subtitle strong {
+            color: var(--text);
+        }
+        .hero .start-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            position: relative;
+        }
+        .hero .btn-start {
+            padding: 14px 44px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 900;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: var(--font);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .hero .btn-start.green {
+            background: var(--neon-green);
+            color: #0a0a14;
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.12);
+        }
+        .hero .btn-start.green:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 60px rgba(0, 255, 136, 0.2);
+        }
+        .hero .btn-start.gold {
+            background: var(--gold);
+            color: #0a0a14;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.08);
+        }
+        .hero .btn-start.gold:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.15);
+        }
+        .hero .btn-start.outline {
+            background: transparent;
+            border: 2px solid var(--border-strong);
+            color: var(--text);
+        }
+        .hero .btn-start.outline:hover {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+        }
+
+        /* ===== STATS BAR ===== */
+        .stats-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 24px;
+            justify-content: center;
+            padding: 14px 24px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 18px;
+            backdrop-filter: blur(12px);
+        }
+        .stats-bar .stat {
+            text-align: center;
+        }
+        .stats-bar .stat .num {
+            font-weight: 900;
+            font-size: 1.3rem;
+            color: var(--text);
+            display: block;
+        }
+        .stats-bar .stat .num.green {
+            color: var(--neon-green);
+        }
+        .stats-bar .stat .num.gold {
+            color: var(--gold);
+        }
+        .stats-bar .stat .num.red {
+            color: var(--neon-red);
+        }
+        .stats-bar .stat .num.blue {
+            color: var(--neon-blue);
+        }
+        .stats-bar .stat .label {
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stats-bar .action-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: var(--font);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .stats-bar .action-btn:hover {
+            border-color: var(--neon-green);
+            color: var(--text);
+        }
+
+        /* ===== CONTROLS ROW ===== */
+        .controls-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            padding: 10px 16px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+        .controls-row .filter-tabs {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .controls-row .filter-tabs .tab-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: var(--font);
+        }
+        .controls-row .filter-tabs .tab-btn:hover {
+            border-color: var(--neon-green);
+            color: var(--text);
+        }
+        .controls-row .filter-tabs .tab-btn.active {
+            background: var(--neon-green-dim);
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+        }
+        .controls-row .sort-btns {
+            display: flex;
+            gap: 4px;
+        }
+        .controls-row .sort-btns .sort-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: var(--font);
+        }
+        .controls-row .sort-btns .sort-btn:hover {
+            border-color: var(--neon-green);
+            color: var(--text);
+        }
+        .controls-row .sort-btns .sort-btn.active {
+            background: var(--neon-green-dim);
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+        }
+        .controls-row .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 160px;
+            max-width: 320px;
+        }
+        .controls-row .search-box input {
+            width: 100%;
+            padding: 7px 14px 7px 36px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 0.8rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        .controls-row .search-box input:focus {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.05);
+        }
+        .controls-row .search-box .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            pointer-events: none;
+        }
+        .controls-row .action-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: var(--font);
+        }
+        .controls-row .action-btn:hover {
+            border-color: var(--neon-green);
+            color: var(--text);
+        }
+
+        .results-count {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+        }
+        .results-count strong {
+            color: var(--text);
+        }
+
+        /* ===== SECTIONS ===== */
+        .section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px 26px;
+            margin-bottom: 18px;
+            backdrop-filter: blur(8px);
+        }
+        .section .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .section .section-header h2 {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section .section-header h2 .sub {
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            font-weight: 400;
+        }
+        .section .section-header .badge-count {
+            background: var(--neon-green-dim);
+            border: 1px solid rgba(0, 255, 136, 0.1);
+            padding: 2px 16px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: var(--neon-green);
+        }
+
+        /* ===== FEATURE GRID ===== */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin: 10px 0;
+        }
+        .feature-card {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius-sm);
+            padding: 16px 18px;
+            transition: var(--transition);
+            cursor: default;
+            position: relative;
+        }
+        .feature-card:hover {
+            border-color: rgba(0, 255, 136, 0.1);
+            transform: translateY(-4px);
+            background: rgba(0, 0, 0, 0.35);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+        .feature-card .icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .feature-card .title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .feature-card .title .tag {
+            font-size: 0.45rem;
+            padding: 1px 8px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+        .feature-card .title .tag.core {
+            background: var(--neon-green-dim);
+            color: var(--neon-green);
+            border: 1px solid rgba(0, 255, 136, 0.1);
+        }
+        .feature-card .title .tag.pro {
+            background: var(--gold-dim);
+            color: var(--gold);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        .feature-card .title .tag.fun {
+            background: var(--neon-red-dim);
+            color: var(--neon-red);
+            border: 1px solid rgba(255, 34, 85, 0.1);
+        }
+        .feature-card .desc {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-top: 4px;
+            line-height: 1.6;
+        }
+        .feature-card .example {
+            font-size: 0.6rem;
+            color: var(--gold);
+            margin-top: 6px;
+            padding: 4px 10px;
+            background: var(--gold-dim);
+            border-radius: 6px;
+            border: 1px solid rgba(255, 215, 0, 0.05);
+        }
+        .feature-card .card-actions {
+            display: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            gap: 4px;
+        }
+        .feature-card:hover .card-actions {
+            display: flex;
+        }
+        .feature-card .card-actions button {
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .feature-card .card-actions button:hover {
+            transform: scale(1.1);
+        }
+        .feature-card .card-actions .bookmark-btn.saved {
+            color: var(--gold);
+        }
+
+        /* ===== BUTTONS REFERENCE ===== */
+        .btn-ref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 8px 0;
+        }
+        .btn-ref {
+            padding: 10px 14px;
+            border-radius: var(--radius-xs);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .btn-ref .btn-label {
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-ref .btn-desc {
+            font-size: 0.65rem;
+            color: var(--text-dim);
+        }
+        .btn-ref .btn-key {
+            font-size: 0.55rem;
+            color: var(--gold);
+            background: var(--gold-dim);
+            padding: 0 8px;
+            border-radius: 4px;
+            display: inline-block;
+            border: 1px solid rgba(255, 215, 0, 0.05);
+        }
+        .btn-ref .btn-key.green {
+            color: var(--neon-green);
+            background: var(--neon-green-dim);
+            border-color: rgba(0, 255, 136, 0.05);
+        }
+
+        /* ===== TROPHY GRID ===== */
+        .trophy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 10px;
+            margin: 8px 0;
+        }
+        .trophy-item {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius-xs);
+            padding: 12px 10px 10px 10px;
+            text-align: center;
+            transition: var(--transition);
+        }
+        .trophy-item .trophy-icon {
+            font-size: 2rem;
+            display: block;
+        }
+        .trophy-item .trophy-name {
+            font-weight: 700;
+            font-size: 0.75rem;
+            margin: 2px 0;
+        }
+        .trophy-item .trophy-desc {
+            font-size: 0.55rem;
+            color: var(--text-dim);
+        }
+        .trophy-item .trophy-badge {
+            font-size: 0.45rem;
+            padding: 1px 8px;
+            border-radius: 10px;
+            background: var(--neon-green-dim);
+            color: var(--neon-green);
+            border: 1px solid rgba(0, 255, 136, 0.05);
+            display: inline-block;
+            margin-top: 2px;
+        }
+
+        /* ===== HOSTING / OS TABS ===== */
+        .os-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 14px;
+            padding: 4px;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: var(--radius-xs);
+        }
+        .os-selector .os-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-dim);
+            padding: 6px 14px;
+            border-radius: var(--radius-xs);
+            font-weight: 600;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: var(--font);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .os-selector .os-btn:hover {
+            border-color: var(--border);
+            color: var(--text);
+        }
+        .os-selector .os-btn.active {
+            background: var(--neon-green-dim);
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+        }
+        .os-selector .os-btn .icon {
+            font-size: 1rem;
+        }
+        .os-instructions {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xs);
+            padding: 16px 18px;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.8;
+        }
+        .os-instructions strong {
+            color: var(--text);
+        }
+        .os-instructions .cmd {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1px 10px;
+            border-radius: 4px;
+            color: var(--gold);
+            font-family: monospace;
+            font-size: 0.8rem;
+        }
+        .os-instructions .highlight {
+            display: block;
+            margin-top: 4px;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        /* ===== FAQ ===== */
+        .faq-item {
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: var(--radius-xs);
+            padding: 12px 16px;
+            margin-bottom: 10px;
+        }
+        .faq-item strong {
+            color: var(--text);
+            display: block;
+            margin-bottom: 2px;
+        }
+        .faq-item p {
+            margin-top: 2px;
+        }
+        .faq-item .green {
+            color: var(--neon-green);
+        }
+        .faq-item .gold {
+            color: var(--gold);
+        }
+        .faq-item .red {
+            color: var(--neon-red);
+        }
+        .faq-item .cmd {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1px 8px;
+            border-radius: 4px;
+            color: var(--gold);
+            font-family: monospace;
+            font-size: 0.8rem;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 24px 10px 8px 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+            margin-top: 12px;
+        }
+        .footer .links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 28px;
+            justify-content: center;
+        }
+        .footer .links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.7rem;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .footer .links a:hover {
+            color: var(--neon-green);
+        }
+        .footer .links a.etsy {
+            color: #f16521;
+        }
+        .footer .links a.etsy:hover {
+            color: #ff8a50;
+        }
+        .footer .links a.telegram {
+            color: #27a7e7;
+        }
+        .footer .links a.telegram:hover {
+            color: #66c2f0;
+        }
+        .footer .copy {
+            color: rgba(240, 240, 255, 0.08);
+            font-size: 0.6rem;
+            margin-top: 12px;
+        }
+        .footer .copy .green {
+            color: rgba(0, 255, 136, 0.2);
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--card);
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-sm);
+            padding: 10px 24px;
+            backdrop-filter: blur(16px);
+            color: var(--text);
+            font-size: 0.75rem;
+            font-weight: 700;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            max-width: 90%;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .toast.success {
+            border-color: var(--neon-green);
+        }
+        .toast.error {
+            border-color: var(--neon-red);
+        }
+        .toast.gold {
+            border-color: var(--gold);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+                padding: 14px 16px;
+            }
+            .header .nav-links {
+                justify-content: center;
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .hero .subtitle {
+                font-size: 0.95rem;
+            }
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            .btn-ref-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .trophy-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .section {
+                padding: 18px 16px;
+            }
+            .controls-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .controls-row .search-box {
+                max-width: 100%;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+            .hero .btn-start {
+                padding: 12px 28px;
+                font-size: 0.9rem;
+            }
+            .btn-ref-grid {
+                grid-template-columns: 1fr;
+            }
+            .trophy-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ===== HEADER ===== -->
+        <header class="header">
+            <a href="#" class="logo">
+                🐍 Pyhub<span class="badge">⚡</span>
+                <span class="version">v2.1</span>
+                <span class="setup-badge">📘 SETUP</span>
+            </a>
+            <div class="nav-links">
+                <a href="#welcome" class="green">🏠 Home</a>
+                <a href="#features">⚙️ Features</a>
+                <a href="#buttons">🎮 Buttons</a>
+                <a href="#trophies">🏆 Trophies</a>
+                <a href="#hosting">🌐 Host</a>
+                <a href="#faq">❓ FAQ</a>
+                <a href="https://www.etsy.com/shop/NexusDigitalArtShop" target="_blank" class="etsy">🛒 Etsy</a>
+                <a href="https://t.me/NexusDigitalArt" target="_blank" class="telegram">💬 Telegram</a>
+                <a href="index_online.html" class="gold">🌐 Online</a>
+                <a href="index_offline.html" class="gold">📴 Offline</a>
+            </div>
+        </header>
+
+        <!-- ===== HERO ===== -->
+        <section class="hero" id="welcome">
+            <h1>
+                <span class="green">🐍 Pyhub</span>
+                <span style="color:var(--text);">·</span>
+                <span class="gold">Reference &amp; Workshop</span>
+            </h1>
+            <p class="subtitle">
+                <strong style="color:var(--text);">Your complete Python reference ecosystem.</strong><br />
+                Commands · Favorites · Search · Export · Workshop — all in one place.<br />
+                <span style="color:var(--text-dim);font-size:0.9rem;">No installation · No server · Works offline.</span>
+            </p>
+            <div class="start-row">
+                <a href="index_online.html" class="btn-start green">🚀 Online (Workshop)</a>
+                <a href="index_offline.html" class="btn-start gold">📴 Offline (Reference)</a>
+                <a href="#features" class="btn-start outline">📖 Explore Features</a>
+            </div>
+        </section>
+
+        <!-- ===== STATS BAR ===== -->
+        <div class="stats-bar" id="statsBar">
+            <div class="stat">
+                <span class="num green" id="totalFeatures">0</span>
+                <span class="label">Commands</span>
+            </div>
+            <div class="stat">
+                <span class="num blue" id="totalVisited">0</span>
+                <span class="label">Visited</span>
+            </div>
+            <div class="stat">
+                <span class="num gold" id="totalBookmarks">0</span>
+                <span class="label">Favorites</span>
+            </div>
+            <div class="stat">
+                <span class="num red" id="totalRatings">0</span>
+                <span class="label">Ratings</span>
+            </div>
+            <button class="action-btn" id="resetBtn">🔄 Reset All</button>
+            <button class="action-btn" id="exportCSVBtn">📤 Export CSV</button>
+            <button class="action-btn" id="printBtn">🖨️ Print</button>
+        </div>
+
+        <!-- ===== CONTROLS ROW ===== -->
+        <div class="controls-row" id="controlsRow">
+            <div class="filter-tabs" id="filterTabs">
+                <button class="tab-btn active" data-filter="all">🌍 All</button>
+                <button class="tab-btn" data-filter="core">⚡ Core</button>
+                <button class="tab-btn" data-filter="pro">💎 Pro</button>
+                <button class="tab-btn" data-filter="fun">🎮 Fun</button>
+            </div>
+            <div class="sort-btns" id="sortBtns">
+                <button class="sort-btn active" id="sortNum">🔢 #</button>
+                <button class="sort-btn" id="sortAlpha">🔤 A‑Z</button>
+                <button class="sort-btn" id="sortRated">⭐ Rated</button>
+            </div>
+            <button class="action-btn" id="randomBtn">🎲 Random</button>
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchBox" placeholder="Search features..." autocomplete="off" />
+            </div>
+        </div>
+
+        <div class="results-count" id="resultsCount">Showing 0 of 0 features</div>
+
+        <!-- ===== FEATURES SECTION ===== -->
+        <section class="section" id="features">
+            <div class="section-header">
+                <h2>⚙️ All Features Explained <span class="sub">— with examples</span></h2>
+                <span class="badge-count">16+ tools</span>
+            </div>
+            <div class="feature-grid" id="featureGrid"></div>
+        </section>
+
+        <!-- ===== BUTTONS REFERENCE ===== -->
+        <section class="section" id="buttons">
+            <div class="section-header">
+                <h2>🎮 Button &amp; Key Reference <span class="sub">— every action explained</span></h2>
+                <span class="badge-count">20+ actions</span>
+            </div>
+
+            <h3 style="font-size:0.9rem;color:var(--gold);margin:6px 0 6px 0;">📘 Reference Buttons</h3>
+            <div class="btn-ref-grid">
+                <div class="btn-ref"><span class="btn-label">📘 All Commands <span class="btn-key green">Home</span></span><span class="btn-desc">Show all Python commands in grid view.</span></div>
+                <div class="btn-ref"><span class="btn-label">⭐ Favorites <span class="btn-key green">F</span></span><span class="btn-desc">Show only your favorite commands.</span></div>
+                <div class="btn-ref"><span class="btn-label">🔍 Search <span class="btn-key green">Ctrl+K</span></span><span class="btn-desc">Search commands by name, syntax, or description.</span></div>
+                <div class="btn-ref"><span class="btn-label">📋 Copy Syntax</span><span class="btn-desc">Copy command syntax to clipboard with one click.</span></div>
+                <div class="btn-ref"><span class="btn-label">⭐ Favorite Toggle</span><span class="btn-desc">Add or remove a command from favorites.</span></div>
+                <div class="btn-ref"><span class="btn-label">📤 JSON Export</span><span class="btn-desc">Export all commands as JSON file.</span></div>
+                <div class="btn-ref"><span class="btn-label">📤 CSV Export</span><span class="btn-desc">Export all commands as CSV file.</span></div>
+                <div class="btn-ref"><span class="btn-label">📂 Categories</span><span class="btn-desc">Filter commands by category (Basics, Strings, Lists, etc.).</span></div>
+                <div class="btn-ref"><span class="btn-label">ℹ️ Detail Modal</span><span class="btn-desc">Click any command card to see full syntax, description, and example.</span></div>
+            </div>
+
+            <h3 style="font-size:0.9rem;color:var(--gold);margin:14px 0 6px 0;">🧪 Workshop Buttons</h3>
+            <div class="btn-ref-grid">
+                <div class="btn-ref"><span class="btn-label">▶️ Run Code</span><span class="btn-desc">Execute Python code in the browser (Pyodide).</span></div>
+                <div class="btn-ref"><span class="btn-label">✔ Check Solution</span><span class="btn-desc">Compare your output with expected output.</span></div>
+                <div class="btn-ref"><span class="btn-label">↺ Reset Code</span><span class="btn-desc">Reset editor to starter code for current challenge.</span></div>
+                <div class="btn-ref"><span class="btn-label">🧪 Select Challenge</span><span class="btn-desc">Choose from 3+ coding challenges.</span></div>
+                <div class="btn-ref"><span class="btn-label">📋 Copy Output</span><span class="btn-desc">Copy console output to clipboard.</span></div>
+            </div>
+
+            <h3 style="font-size:0.9rem;color:var(--gold);margin:14px 0 6px 0;">⌨️ Keyboard Shortcuts</h3>
+            <div style="display:flex;flex-wrap:wrap;gap:4px 12px;font-size:0.75rem;color:var(--text-dim);padding:4px 12px;background:rgba(0,0,0,0.2);border-radius:var(--radius-xs);">
+                <span><span class="btn-key green">Ctrl+K</span> Search</span>
+                <span><span class="btn-key green">Esc</span> Close modal</span>
+                <span><span class="btn-key green">R</span> Random feature</span>
+                <span><span class="btn-key green">Ctrl+Shift+P</span> Print</span>
+                <span><span class="btn-key green">?</span> Show shortcuts</span>
+            </div>
+        </section>
+
+        <!-- ===== TROPHIES SECTION ===== -->
+        <section class="section" id="trophies">
+            <div class="section-header">
+                <h2>🏆 Achievement System <span class="sub">— 12+ trophies to unlock</span></h2>
+                <span class="badge-count">🎯 12 trophies</span>
+            </div>
+            <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:8px;">
+                Every achievement unlocks automatically when you complete the required action. Each one triggers <strong>confetti + toast + dopamine boost</strong>.
+            </p>
+            <div class="trophy-grid">
+                <div class="trophy-item"><span class="trophy-icon">📘</span><div class="trophy-name">First Command</div><div class="trophy-desc">Open your first command</div><span class="trophy-badge">🔓 unlocked</span></div>
+                <div class="trophy-item"><span class="trophy-icon">⭐</span><div class="trophy-name">First Favorite</div><div class="trophy-desc">Add your first favorite</div><span class="trophy-badge">🔓 unlocked</span></div>
+                <div class="trophy-item"><span class="trophy-icon">📋</span><div class="trophy-name">10 Copies</div><div class="trophy-desc">Copy syntax 10 times</div><span class="trophy-badge">🔓 unlocked</span></div>
+                <div class="trophy-item"><span class="trophy-icon">🔍</span><div class="trophy-name">Search Master</div><div class="trophy-desc">Search 5+ times</div><span class="trophy-badge">🔓 unlocked</span></div>
+                <div class="trophy-item"><span class="trophy-icon">🧪</span><div class="trophy-name">First Run</div><div class="trophy-desc">Run code in workshop</div><span class="trophy-badge">🔓 unlocked</span></div>
+                <div class="trophy-item"><span class="trophy-icon">✔</span><div class="trophy-name">Correct Solution</div><div class="trophy-desc">Pass a challenge check</div><span class="trophy-badge">🔓 unlocked</span></div>
+                <div class="trophy-item"><span class="trophy-icon">📤</span><div class="trophy-name">Exporter</div><div class="trophy-desc">Export data (JSON or CSV)</div><span class="trophy-badge">🔓 unlocked</span></div>
+                <div class="trophy-item"><span class="trophy-icon">📂</span><div class="trophy-name">Category Explorer</div><div class="trophy-desc">Visit 5+ categories</div><span class="trophy-badge">🔓 unlocked</span></div>
+                <div class="trophy-item"><span class="trophy-icon">📖</span><div class="trophy-name">Detail Reader</div><div class="trophy-desc">Open 10+ detail modals</div><span class="trophy-badge">🔓 unlocked</span></div>
+                <div class="trophy-item"><span class="trophy-icon">📱</span><div class="trophy-name">PWA Install</div><div class="trophy-desc">Install as app (on mobile)</div><span class="trophy-badge">🔓 unlocked</span></div>
+                <div class="trophy-item"><span class="trophy-icon">🏆</span><div class="trophy-name">All Trophies</div><div class="trophy-desc">Unlock all 12 trophies</div><span class="trophy-badge">🔓 unlocked</span></div>
+                <div class="trophy-item"><span class="trophy-icon">👑</span><div class="trophy-name">Pyhub Master</div><div class="trophy-desc">Use every feature at least once</div><span class="trophy-badge">🔓 unlocked</span></div>
+            </div>
+            <div style="font-size:0.7rem;color:var(--text-dim);margin-top:6px;">
+                💡 <strong>Hidden mechanic:</strong> When you unlock a trophy, <span style="color:var(--gold);">confetti</span> rains and a <span style="color:var(--neon-green);">toast</span> announces it.
+            </div>
+        </section>
+
+        <!-- ===== HOSTING SECTION ===== -->
+        <section class="section" id="hosting">
+            <div class="section-header">
+                <h2>🌐 Local &amp; Cloud Hosting <span class="sub">— run anywhere</span></h2>
+                <span class="badge-count">11 platforms</span>
+            </div>
+            <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:10px;">
+                Choose your platform below for step‑by‑step instructions. From local development to global deployment, every option is covered.
+            </p>
+
+            <div class="os-selector">
+                <button class="os-btn active" data-os="python" onclick="showOS('python')"><span class="icon">🐍</span> Python</button>
+                <button class="os-btn" data-os="node" onclick="showOS('node')"><span class="icon">🟢</span> Node.js</button>
+                <button class="os-btn" data-os="vscode" onclick="showOS('vscode')"><span class="icon">💻</span> VS Code</button>
+                <button class="os-btn" data-os="android" onclick="showOS('android')"><span class="icon">📱</span> Android</button>
+                <button class="os-btn" data-os="ios" onclick="showOS('ios')"><span class="icon">🍎</span> iOS</button>
+                <button class="os-btn" data-os="windows" onclick="showOS('windows')"><span class="icon">🪟</span> Windows</button>
+                <button class="os-btn" data-os="linux" onclick="showOS('linux')"><span class="icon">🐧</span> Linux</button>
+                <button class="os-btn" data-os="docker" onclick="showOS('docker')"><span class="icon">🐳</span> Docker</button>
+                <button class="os-btn" data-os="github_pages" onclick="showOS('github_pages')"><span class="icon">🌐</span> GitHub Pages</button>
+                <button class="os-btn" data-os="netlify" onclick="showOS('netlify')"><span class="icon">🌐</span> Netlify</button>
+                <button class="os-btn" data-os="vercel" onclick="showOS('vercel')"><span class="icon">🌐</span> Vercel</button>
+            </div>
+
+            <div id="os-instructions" class="os-instructions">
+                <strong>🐍 Python (any OS)</strong><br />
+                1. Open terminal in the project folder.<br />
+                2. Run <span class="cmd">python3 -m http.server 8000</span><br />
+                3. Open browser to <span class="cmd">http://localhost:8000</span><br />
+                4. On phone, use <span class="cmd">http://[your-ip]:8000</span><br />
+                <span class="highlight">✅ Works on Windows, macOS, Linux, Android (Termux), iOS (iSH).</span>
+            </div>
+
+            <div style="font-size:0.7rem;color:var(--text-dim);margin-top:8px;padding:8px 12px;background:rgba(255,215,0,0.03);border-radius:var(--radius-xs);border:1px solid rgba(255,215,0,0.05);">
+                💡 <strong>Local IP:</strong> <span class="cmd">ip addr</span> (Linux/macOS) or <span class="cmd">ipconfig</span> (Windows).<br />
+                💡 <strong>Firewall:</strong> Allow <span class="cmd">port 8000</span> on your OS firewall for local network access.
+            </div>
+        </section>
+
+        <!-- ===== FAQ SECTION ===== -->
+        <section class="section" id="faq">
+            <div class="section-header">
+                <h2>❓ FAQ <span class="sub">— first‑time user</span></h2>
+                <span class="badge-count">common questions</span>
+            </div>
+
+            <div style="display:grid;gap:10px;font-size:0.85rem;color:var(--text-dim);">
+                <div class="faq-item">
+                    <strong>🤔 I've never used Pyhub before. Where do I start?</strong>
+                    <p>Open <span class="green">Online (Workshop)</span> → browse commands → try the <strong>Workshop</strong> tab to write and run Python code. Or use <span class="gold">Offline (Reference)</span> to just browse and copy commands. Both are beginner-friendly.</p>
+                </div>
+                <div class="faq-item">
+                    <strong>📚 What's the difference between the two versions?</strong>
+                    <p><span class="green">Online</span> includes an interactive Python workshop with live code execution (requires internet for first load). <span class="gold">Offline</span> is a pure reference mode – all commands available offline, no internet needed after first visit.</p>
+                </div>
+                <div class="faq-item">
+                    <strong>🏆 How do I unlock trophies?</strong>
+                    <p>Just use the app! Each achievement unlocks automatically when you hit the requirement. For example: <strong>First Command</strong> → open any command. <strong>First Favorite</strong> → star a command. You'll see confetti and a toast when you unlock one.</p>
+                </div>
+                <div class="faq-item">
+                    <strong>📱 Can I use this on my phone?</strong>
+                    <p>Yes! Both versions are <strong>mobile-responsive</strong> and <strong>PWA-ready</strong>. Open in Chrome/Safari → tap <strong>"Add to Home Screen"</strong> → install as an app. Works offline.</p>
+                </div>
+                <div class="faq-item">
+                    <strong>💾 Where is my data saved?</strong>
+                    <p>All data (favorites, visited, ratings, workshop progress) is saved in your browser's <span class="gold">localStorage</span>. It stays on your device only. Nothing is sent anywhere.</p>
+                </div>
+                <div class="faq-item">
+                    <strong>🔄 How do I reset everything?</strong>
+                    <p>Click the <span class="red">🔄 Reset All</span> button in the stats bar above. Or delete <span class="cmd">localStorage</span> manually via browser dev tools.</p>
+                </div>
+                <div class="faq-item">
+                    <strong>🧪 What if the workshop doesn't load?</strong>
+                    <p>The online version uses <strong>Pyodide</strong> (Python in the browser). First load may take 2-5 seconds. If it fails, try refreshing or check your internet connection. After first load, it works offline.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="footer">
+            <div class="links">
+                <a href="index_online.html">🌐 Online</a>
+                <a href="index_offline.html">📴 Offline</a>
+                <a href="#welcome">🏠 Top</a>
+                <a href="https://www.etsy.com/shop/NexusDigitalArtShop" target="_blank" class="etsy">🛒 Etsy Shop</a>
+                <a href="https://t.me/NexusDigitalArt" target="_blank" class="telegram">💬 Telegram Channel</a>
+                <a href="#" onclick="alert('🔒 All data is stored locally. No tracking.')">🔒 Privacy</a>
+            </div>
+            <div class="copy">
+                <span class="green">🐍 Pyhub</span> · Reference &amp; Workshop · v2.1 · Built for learners, by learners.
+            </div>
+        </footer>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ============ DATA ============
+            const featuresData = [
+                { id: 'commands', icon: '📘', title: 'Command Reference', tags: ['core'], desc: 'Browse all Python commands with syntax, description, and examples. Grid view with categories.', example: '📌 Click any command card → view full syntax + example. Copy with one click.' },
+                { id: 'favorites', icon: '⭐', title: 'Favorites System', tags: ['core'], desc: 'Star your most-used commands. Access them instantly from the Favorites tab.', example: '📌 Click ☆ on any command → it turns ⭐ and appears in Favorites.' },
+                { id: 'search', icon: '🔍', title: 'Search & Filter', tags: ['core'], desc: 'Search commands by name, syntax, or description. Filter by category.', example: '📌 Type "list" → all list-related commands appear. Click "Strings" to filter.' },
+                { id: 'workshop', icon: '🧪', title: 'Interactive Workshop', tags: ['pro'], desc: 'Write and run Python code in the browser. 3+ challenges with starter code and solution checking.', example: '📌 Select "Sum of Two Numbers" → write code → click Run → see output. Check Solution to verify.' },
+                { id: 'export', icon: '📤', title: 'Export (JSON / CSV)', tags: ['pro'], desc: 'Export all commands to JSON or CSV for backup, analysis, or sharing.', example: '📌 Click 📤 JSON → download a complete JSON file of all commands.' },
+                { id: 'detail_modal', icon: 'ℹ️', title: 'Detail Modal', tags: ['core'], desc: 'Click any command to open a detailed modal with full syntax, description, and example. Copy syntax with one click.', example: '📌 Click "Variables & Assignment" → modal opens → copy syntax → close with Esc.' },
+                { id: 'categories', icon: '📂', title: 'Categories', tags: ['core'], desc: 'Organized categories: Basics, Strings, Lists, Dictionaries, Control Flow, Functions, OOP, and more.', example: '📌 Click "Functions" → all function-related commands appear.' },
+                { id: 'copy_syntax', icon: '📋', title: 'Copy Syntax', tags: ['core'], desc: 'Copy any command syntax to your clipboard with a single click. Great for learning and reference.', example: '📌 Hover over any command → click 📋 Copy → syntax is ready to paste.' },
+                { id: 'pwa', icon: '📱', title: 'PWA Ready', tags: ['pro'], desc: 'Install on any device (phone, tablet, desktop) as a native app. Works offline with service worker.', example: '📌 On Chrome/Safari → tap "Add to Home Screen" → name it → install.' },
+                { id: 'keyboard', icon: '⌨️', title: 'Keyboard Shortcuts', tags: ['core'], desc: 'Ctrl+K = Search, Esc = Close modal, R = Random, Ctrl+Shift+P = Print, ? = Show shortcuts.', example: '📌 Press Ctrl+K → search bar focuses. Press Esc → close any modal.' },
+                { id: 'trophies', icon: '🏆', title: 'Achievement System', tags: ['fun'], desc: '12+ achievements: First Command, First Favorite, 10 Copies, Search Master, First Run, and more.', example: '📌 🏆 First Favorite unlocks after you star your first command. Confetti + toast appear.' },
+                { id: 'random', icon: '🎲', title: 'Random Feature', tags: ['fun'], desc: 'Click 🎲 Random to discover a random command. Great for learning new things.', example: '📌 Click 🎲 → a random command card lights up and scrolls into view.' },
+                { id: 'theme', icon: '🌓', title: 'Dark / Light Mode', tags: ['core'], desc: 'Built-in dark theme with neon green accents. Light mode also available via Settings.', example: '📌 The interface uses a dark theme with neon green, gold, and blue accents.' },
+                { id: 'shortcuts_help', icon: '❓', title: 'Help & Shortcuts', tags: ['fun'], desc: 'Press ? to see all available shortcuts. Toast notification shows the list.', example: '📌 Press ? → "Shortcuts: R=Random, Ctrl+Shift+P=Print, Ctrl+K=Search" appears.' },
+                { id: 'offline', icon: '📴', title: 'Offline Ready', tags: ['pro'], desc: 'The offline version works completely without internet. All commands, favorites, and data are cached.', example: '📌 Open Offline version → browse commands → all data is stored locally.' },
+                { id: 'setup', icon: '🚀', title: 'Setup Dashboard', tags: ['core'], desc: 'This dashboard! The main entry point to choose between Online and Offline versions.', example: '📌 You are looking at it — the Setup Dashboard. Click either version to start.' }
+            ];
+
+            // ============ STATE ============
+            let currentFilter = 'all';
+            let searchQuery = '';
+            let sortAlpha = false;
+            let sortRated = false;
+            let favorites = new Set(JSON.parse(localStorage.getItem('pyhub_features_favorites') || '[]'));
+            let ratings = JSON.parse(localStorage.getItem('pyhub_features_ratings') || '{}');
+            let visited = new Set(JSON.parse(localStorage.getItem('pyhub_features_visited') || '[]'));
+            let visitCounts = JSON.parse(localStorage.getItem('pyhub_features_visit_counts') || '{}');
+
+            function saveState() {
+                localStorage.setItem('pyhub_features_favorites', JSON.stringify([...favorites]));
+                localStorage.setItem('pyhub_features_ratings', JSON.stringify(ratings));
+                localStorage.setItem('pyhub_features_visited', JSON.stringify([...visited]));
+                localStorage.setItem('pyhub_features_visit_counts', JSON.stringify(visitCounts));
+                localStorage.setItem('pyhub_features_filter', currentFilter);
+                localStorage.setItem('pyhub_features_sort_alpha', JSON.stringify(sortAlpha));
+                localStorage.setItem('pyhub_features_sort_rated', JSON.stringify(sortRated));
+            }
+
+            function loadState() {
+                const savedFilter = localStorage.getItem('pyhub_features_filter');
+                if (savedFilter) currentFilter = savedFilter;
+                const savedSortAlpha = localStorage.getItem('pyhub_features_sort_alpha');
+                if (savedSortAlpha) sortAlpha = JSON.parse(savedSortAlpha);
+                const savedSortRated = localStorage.getItem('pyhub_features_sort_rated');
+                if (savedSortRated) sortRated = JSON.parse(savedSortRated);
+            }
+
+            function showToast(msg, type) {
+                const toast = document.getElementById('toast');
+                toast.textContent = msg;
+                toast.className = 'toast ' + type;
+                toast.classList.add('show');
+                clearTimeout(toast._timeout);
+                toast._timeout = setTimeout(() => toast.classList.remove('show'), 3000);
+            }
+
+            function getFilteredFeatures() {
+                let filtered = featuresData;
+                if (currentFilter !== 'all') {
+                    filtered = filtered.filter(f => f.tags.includes(currentFilter));
+                }
+                if (searchQuery.trim()) {
+                    const q = searchQuery.trim().toLowerCase();
+                    filtered = filtered.filter(f =>
+                        f.title.toLowerCase().includes(q) ||
+                        f.desc.toLowerCase().includes(q) ||
+                        f.example.toLowerCase().includes(q)
+                    );
+                }
+                return filtered;
+            }
+
+            function getSortedFeatures(filtered) {
+                if (sortRated) {
+                    return filtered.slice().sort((a, b) => (ratings[b.id] || 0) - (ratings[a.id] || 0));
+                } else if (sortAlpha) {
+                    return filtered.slice().sort((a, b) => a.title.localeCompare(b.title));
+                } else {
+                    return filtered.slice().sort((a, b) => featuresData.indexOf(a) - featuresData.indexOf(b));
+                }
+            }
+
+            function render() {
+                const filtered = getFilteredFeatures();
+                const sorted = getSortedFeatures(filtered);
+                const grid = document.getElementById('featureGrid');
+                const count = document.getElementById('resultsCount');
+                const totalFeatures = document.getElementById('totalFeatures');
+                const totalVisited = document.getElementById('totalVisited');
+                const totalBookmarks = document.getElementById('totalBookmarks');
+                const totalRatings = document.getElementById('totalRatings');
+
+                count.innerHTML = 'Showing <strong>' + sorted.length + '</strong> of <strong>' + featuresData.length +
+                    '</strong> features';
+                totalFeatures.textContent = featuresData.length;
+                totalVisited.textContent = visited.size;
+                totalBookmarks.textContent = favorites.size;
+                totalRatings.textContent = Object.keys(ratings).length;
+
+                if (sorted.length === 0) {
+                    grid.innerHTML =
+                        '<div style="grid-column:1/-1;text-align:center;padding:30px 10px;color:var(--text-dim);"><span style="font-size:2rem;">🔍</span><p>No features found matching your criteria.</p><p style="font-size:0.8rem;color:var(--text-dim);">Try adjusting your filters or search.</p></div>';
+                    return;
+                }
+
+                grid.innerHTML = sorted.map(function(f) {
+                    var isFav = favorites.has(f.id);
+                    var rating = ratings[f.id] || 0;
+                    var tagClass = f.tags[0];
+                    return '<div class="feature-card" data-id="' + f.id + '">' +
+                        '<span class="icon">' + f.icon + '</span>' +
+                        '<div class="title">' + f.title +
+                        '<span class="tag ' + tagClass + '">' + tagClass + '</span></div>' +
+                        '<div class="desc">' + f.desc + '</div>' +
+                        '<div class="example">' + f.example + '</div>' +
+                        '<div class="card-actions">' +
+                        '<button class="bookmark-btn ' + (isFav ? 'saved' : '') + '" data-id="' + f.id +
+                        '" title="' + (isFav ? 'Remove bookmark' : 'Add bookmark') + '">' + (isFav ? '⭐' : '🔖') +
+                        '</button>' +
+                        '<button class="rate-btn" data-id="' + f.id + '" title="Rate this feature">' + (rating > 0 ? '⭐'
+                            .repeat(rating) : '☆') + '</button>' +
+                        '</div>' +
+                        '</div>';
+                }).join('');
+
+                grid.querySelectorAll('.feature-card').forEach(function(card) {
+                    card.addEventListener('click', function(e) {
+                        if (e.target.closest('.card-actions')) return;
+                        var id = this.dataset.id;
+                        if (!visited.has(id)) {
+                            visited.add(id);
+                            visitCounts[id] = (visitCounts[id] || 0) + 1;
+                            saveState();
+                            render();
+                            showToast('📖 Visited: ' + featuresData.find(function(f) { return f.id === id; })
+                                .title, 'info');
+                        }
+                    });
+                });
+
+                grid.querySelectorAll('.bookmark-btn').forEach(function(btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        var id = this.dataset.id;
+                        if (favorites.has(id)) {
+                            favorites.delete(id);
+                            showToast('🔖 Bookmark removed', 'info');
+                        } else {
+                            favorites.add(id);
+                            showToast('⭐ Bookmark added!', 'success');
+                        }
+                        saveState();
+                        render();
+                    });
+                });
+
+                grid.querySelectorAll('.rate-btn').forEach(function(btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        var id = this.dataset.id;
+                        var input = prompt('Rate this feature (1-5):');
+                        if (input !== null && !isNaN(input) && input >= 1 && input <= 5) {
+                            ratings[id] = parseInt(input);
+                            saveState();
+                            render();
+                            showToast('⭐ Rated ' + input + '/5', 'success');
+                        } else if (input !== null) {
+                            showToast('Please enter a number between 1 and 5.', 'error');
+                        }
+                    });
+                });
+            }
+
+            // ============ CONTROLS ============
+            function setupControls() {
+                document.querySelectorAll('#filterTabs .tab-btn').forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('#filterTabs .tab-btn').forEach(function(b) { b
+                                .classList.remove('active'); });
+                        this.classList.add('active');
+                        currentFilter = this.dataset.filter;
+                        saveState();
+                        render();
+                    });
+                });
+
+                document.getElementById('sortNum').addEventListener('click', function() {
+                    sortAlpha = false;
+                    sortRated = false;
+                    document.querySelectorAll('#sortBtns .sort-btn').forEach(function(b) { b.classList.remove(
+                            'active'); });
+                    this.classList.add('active');
+                    saveState();
+                    render();
+                });
+                document.getElementById('sortAlpha').addEventListener('click', function() {
+                    sortAlpha = true;
+                    sortRated = false;
+                    document.querySelectorAll('#sortBtns .sort-btn').forEach(function(b) { b.classList.remove(
+                            'active'); });
+                    this.classList.add('active');
+                    saveState();
+                    render();
+                });
+                document.getElementById('sortRated').addEventListener('click', function() {
+                    sortRated = true;
+                    sortAlpha = false;
+                    document.querySelectorAll('#sortBtns .sort-btn').forEach(function(b) { b.classList.remove(
+                            'active'); });
+                    this.classList.add('active');
+                    saveState();
+                    render();
+                });
+
+                document.getElementById('searchBox').addEventListener('input', function() {
+                    searchQuery = this.value;
+                    render();
+                });
+
+                document.getElementById('randomBtn').addEventListener('click', function() {
+                    var filtered = getFilteredFeatures();
+                    if (filtered.length === 0) return;
+                    var random = filtered[Math.floor(Math.random() * filtered.length)];
+                    document.getElementById('searchBox').value = '';
+                    searchQuery = '';
+                    currentFilter = 'all';
+                    document.querySelectorAll('#filterTabs .tab-btn').forEach(function(b) { b.classList.remove(
+                            'active'); });
+                    document.querySelector('#filterTabs .tab-btn[data-filter="all"]').classList.add('active');
+                    render();
+                    var target = document.querySelector('.feature-card[data-id="' + random.id + '"]');
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        target.style.borderColor = 'var(--gold)';
+                        setTimeout(function() { target.style.borderColor = ''; }, 3000);
+                    }
+                    showToast('🎲 Random: ' + random.title, 'gold');
+                });
+
+                document.getElementById('resetBtn').addEventListener('click', function() {
+                    if (confirm('Clear all visited, bookmarks, ratings, and settings?')) {
+                        localStorage.removeItem('pyhub_features_favorites');
+                        localStorage.removeItem('pyhub_features_ratings');
+                        localStorage.removeItem('pyhub_features_visited');
+                        localStorage.removeItem('pyhub_features_visit_counts');
+                        localStorage.removeItem('pyhub_features_filter');
+                        localStorage.removeItem('pyhub_features_sort_alpha');
+                        localStorage.removeItem('pyhub_features_sort_rated');
+                        favorites.clear();
+                        ratings = {};
+                        visited.clear();
+                        visitCounts = {};
+                        currentFilter = 'all';
+                        sortAlpha = false;
+                        sortRated = false;
+                        document.querySelectorAll('#filterTabs .tab-btn').forEach(function(b) { b.classList.remove(
+                                'active'); });
+                        document.querySelector('#filterTabs .tab-btn[data-filter="all"]').classList.add('active');
+                        document.querySelectorAll('#sortBtns .sort-btn').forEach(function(b) { b.classList.remove(
+                                'active'); });
+                        document.getElementById('sortNum').classList.add('active');
+                        document.getElementById('searchBox').value = '';
+                        searchQuery = '';
+                        render();
+                        showToast('🔄 All data has been reset.', 'info');
+                    }
+                });
+
+                document.getElementById('exportCSVBtn').addEventListener('click', function() {
+                    if (featuresData.length === 0) {
+                        showToast('No data to export.', 'error');
+                        return;
+                    }
+                    var rows = [
+                        ['ID', 'Title', 'Tags', 'Visited', 'Bookmark', 'Rating']
+                    ];
+                    featuresData.forEach(function(f) {
+                        rows.push([
+                            f.id,
+                            f.title,
+                            f.tags.join(','),
+                            visited.has(f.id) ? 'Yes' : 'No',
+                            favorites.has(f.id) ? 'Yes' : 'No',
+                            ratings[f.id] || '0'
+                        ]);
+                    });
+                    var csv = rows.map(function(row) {
+                        return row.map(function(cell) {
+                            var str = String(cell);
+                            if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+                                return '"' + str.replace(/"/g, '""') + '"';
+                            }
+                            return str;
+                        }).join(',');
+                    }).join('\n');
+                    var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+                    var link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'pyhub_features_export.csv';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    showToast('📤 CSV downloaded!', 'success');
+                });
+
+                document.getElementById('printBtn').addEventListener('click', function() {
+                    window.print();
+                });
+            }
+
+            // ============ OS INSTRUCTIONS ============
+            var osData = {
+                python: {
+                    icon: '🐍',
+                    title: 'Python (any OS)',
+                    steps: [
+                        'Open terminal in the project folder.',
+                        'Run <span class="cmd">python3 -m http.server 8000</span>',
+                        'Open browser to <span class="cmd">http://localhost:8000</span>',
+                        'On phone, use <span class="cmd">http://[your-ip]:8000</span>'
+                    ],
+                    note: '✅ Works on Windows, macOS, Linux, Android (Termux), iOS (iSH).'
+                },
+                node: {
+                    icon: '🟢',
+                    title: 'Node.js (any OS)',
+                    steps: [
+                        'Install Node.js from <span class="cmd">nodejs.org</span>',
+                        'Open terminal in the project folder.',
+                        'Run <span class="cmd">npx serve</span> (or <span class="cmd">npx http-server .</span>)',
+                        'Open <span class="cmd">http://localhost:3000</span> (or 8080)'
+                    ],
+                    note: '✅ Fast, lightweight, works everywhere Node.js is installed.'
+                },
+                vscode: {
+                    icon: '💻',
+                    title: 'VS Code + Live Server',
+                    steps: [
+                        'Open project in VS Code.',
+                        'Install the <span class="cmd">Live Server</span> extension (by Ritwick Dey).',
+                        'Right-click <span class="cmd">index.html</span> → <span class="cmd">"Open with Live Server"</span>',
+                        'Use the generated URL on any device on your network.'
+                    ],
+                    note: '✅ Great for development, auto‑refresh, and debugging.'
+                },
+                android: {
+                    icon: '📱',
+                    title: 'Android (Termux)',
+                    steps: [
+                        'Install <span class="cmd">Termux</span> from F-Droid or Google Play.',
+                        'Run: <span class="cmd">pkg update && pkg install python</span>',
+                        'Copy project files to <span class="cmd">/sdcard/Download/</span>',
+                        'Run: <span class="cmd">cd /sdcard/Download && python3 -m http.server 8080</span>',
+                        'Open <span class="cmd">http://192.168.1.x:8080</span> on any device.'
+                    ],
+                    note: '✅ Full Python on Android — works like a mini server.'
+                },
+                ios: {
+                    icon: '🍎',
+                    title: 'iOS (iSH)',
+                    steps: [
+                        'Install <span class="cmd">iSH</span> from the App Store.',
+                        'Run: <span class="cmd">apk update && apk add python3</span>',
+                        'Upload project files via iSH (or use a cloud service).',
+                        'Run: <span class="cmd">cd /root && python3 -m http.server 8080</span>',
+                        'Open <span class="cmd">http://[your-ip]:8080</span> on your phone or another device.'
+                    ],
+                    note: '✅ iSH brings Python to iOS — perfect for hosting on the go.'
+                },
+                windows: {
+                    icon: '🪟',
+                    title: 'Windows (CMD / WSL)',
+                    steps: [
+                        'Open <span class="cmd">CMD</span> or <span class="cmd">PowerShell</span> in the project folder.',
+                        'Run: <span class="cmd">python -m http.server 8000</span> (if Python is installed).',
+                        'Or use WSL: Open WSL terminal, navigate to the folder, run <span class="cmd">python3 -m http.server 8000</span>.',
+                        'Find your local IP: <span class="cmd">ipconfig</span> → look for <span class="cmd">IPv4 Address</span>.'
+                    ],
+                    note: '✅ Works natively on Windows + WSL. No additional tools needed.'
+                },
+                linux: {
+                    icon: '🐧',
+                    title: 'Linux (Nginx)',
+                    steps: [
+                        'Install Nginx: <span class="cmd">sudo apt install nginx</span> (Ubuntu/Debian).',
+                        'Copy project files to <span class="cmd">/var/www/html/</span>: <span class="cmd">sudo cp -r . /var/www/html/</span>.',
+                        'Start Nginx: <span class="cmd">sudo systemctl start nginx</span>.',
+                        'Open <span class="cmd">http://localhost</span> in your browser.'
+                    ],
+                    note: '✅ Static hosting with Nginx — the most performance‑oriented method for Linux.'
+                },
+                docker: {
+                    icon: '🐳',
+                    title: 'Docker (Containerized)',
+                    steps: [
+                        'Create a <span class="cmd">Dockerfile</span> in the project root with <span class="cmd">FROM nginx:alpine</span> and <span class="cmd">COPY . /usr/share/nginx/html</span>.',
+                        'Build the image: <span class="cmd">docker build -t pyhub .</span>',
+                        'Run the container: <span class="cmd">docker run -p 8080:80 pyhub</span>.',
+                        'Open <span class="cmd">http://localhost:8080</span> in your browser.'
+                    ],
+                    note: '✅ Portable container — works on any platform with Docker.'
+                },
+                github_pages: {
+                    icon: '🌐',
+                    title: 'GitHub Pages',
+                    steps: [
+                        'Create a new repository on GitHub (e.g., <span class="cmd">pyhub</span>).',
+                        'Upload all project files to the repository.',
+                        'Go to <span class="cmd">Settings</span> → <span class="cmd">Pages</span> → select <span class="cmd">main</span> branch → <span class="cmd">Save</span>.',
+                        'Access your site at: <span class="cmd">https://[username].github.io/pyhub/</span>.'
+                    ],
+                    note: '✅ 100% free static hosting with built‑in SSL.'
+                },
+                netlify: {
+                    icon: '🌐',
+                    title: 'Netlify',
+                    steps: [
+                        'Sign up at <span class="cmd">netlify.com</span>.',
+                        'Drag and drop your project folder onto the Netlify dashboard.',
+                        'Netlify automatically deploys your site and provides a public URL.',
+                        'You can also connect your GitHub repository for automatic deploys.'
+                    ],
+                    note: '✅ Free plan includes SSL, global CDN, and automatic deploys.'
+                },
+                vercel: {
+                    icon: '🌐',
+                    title: 'Vercel',
+                    steps: [
+                        'Sign up at <span class="cmd">vercel.com</span>.',
+                        'Install Vercel CLI: <span class="cmd">npm i -g vercel</span>.',
+                        'Run <span class="cmd">vercel</span> in the project folder and follow the prompts.',
+                        'Vercel will deploy your site and provide a public URL (e.g., <span class="cmd">https://pyhub.vercel.app</span>).'
+                    ],
+                    note: '✅ Free plan with great performance and edge network.'
+                }
+            };
+
+            window.showOS = function(osKey) {
+                var data = osData[osKey];
+                if (!data) return;
+                document.querySelectorAll('.os-btn').forEach(function(btn) {
+                    btn.classList.toggle('active', btn.dataset.os === osKey);
+                });
+                var container = document.getElementById('os-instructions');
+                var stepsHTML = data.steps.map(function(s, i) {
+                    return '<strong>' + (i + 1) + '.</strong> ' + s + '<br />';
+                }).join('');
+                container.innerHTML = '<strong>' + data.icon + ' ' + data.title + '</strong><br />' + stepsHTML +
+                    '<span style="color:var(--gold);font-weight:700;display:block;margin-top:4px;">' + data.note +
+                    '</span>';
+                showToast('📡 Switched to ' + data.title, 'success');
+            };
+
+            // ============ KEYBOARD SHORTCUTS ============
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'P') {
+                    e.preventDefault();
+                    window.print();
+                }
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    document.getElementById('searchBox').focus();
+                }
+                if (e.key === 'r' || e.key === 'R') {
+                    document.getElementById('randomBtn').click();
+                }
+                if (e.key === '?' && !e.ctrlKey && !e.metaKey) {
+                    e.preventDefault();
+                    showToast(
+                        '⌨️ Shortcuts: R=Random, Ctrl+Shift+P=Print, Ctrl+K=Search, Esc=Close modal',
+                        'gold');
+                }
+                if (e.key === 'Escape') {
+                    // close modals if needed
+                }
+            });
+
+            // ============ ANCHOR LINKS ============
+            document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+                anchor.addEventListener('click', function(e) {
+                    var target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            // ============ INIT ============
+            function init() {
+                loadState();
+                var filterBtn = document.querySelector('#filterTabs .tab-btn[data-filter="' + currentFilter + '"]');
+                if (filterBtn) {
+                    document.querySelectorAll('#filterTabs .tab-btn').forEach(function(b) { b.classList.remove(
+                        'active'); });
+                    filterBtn.classList.add('active');
+                }
+                if (sortRated) {
+                    document.querySelectorAll('#sortBtns .sort-btn').forEach(function(b) { b.classList.remove(
+                        'active'); });
+                    document.getElementById('sortRated').classList.add('active');
+                } else if (sortAlpha) {
+                    document.querySelectorAll('#sortBtns .sort-btn').forEach(function(b) { b.classList.remove(
+                        'active'); });
+                    document.getElementById('sortAlpha').classList.add('active');
+                } else {
+                    document.querySelectorAll('#sortBtns .sort-btn').forEach(function(b) { b.classList.remove(
+                        'active'); });
+                    document.getElementById('sortNum').classList.add('active');
+                }
+                render();
+                setupControls();
+                showOS('python');
+
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.register('/service-worker.js').catch(function() {});
+                }
+
+                console.log('🐍 Pyhub Setup Dashboard v2.1 · Ready');
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
+
+</body>
+</html>

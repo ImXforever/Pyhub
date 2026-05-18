@@ -1,0 +1,1979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Pyhub – Python Reference & Workshop</title>
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0a0a14" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <style>
+        :root {
+            --neon-green: #00ff88;
+            --neon-green-dim: rgba(0, 255, 136, 0.10);
+            --neon-green-glow: rgba(0, 255, 136, 0.18);
+            --neon-red: #ff3860;
+            --neon-blue: #4fc3f7;
+            --neon-blue-dim: rgba(79, 195, 247, 0.08);
+            --neon-white: #e8e8f0;
+            --dark-bg: #0a0a14;
+            --sidebar-bg: rgba(10, 10, 20, 0.94);
+            --card-bg: rgba(16, 16, 28, 0.80);
+            --card-hover-bg: rgba(20, 20, 36, 0.92);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --glass-border-strong: rgba(0, 255, 136, 0.15);
+            --radius: 14px;
+            --radius-sm: 10px;
+            --radius-xs: 7px;
+            --font: 'Inter', 'Segoe UI', Tahoma, sans-serif;
+            --transition: 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --sidebar-w: 270px;
+            --bottom-nav-h: 62px;
+            --header-h: 56px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap');
+
+        html {
+            scroll-behavior: smooth;
+            height: 100%;
+        }
+        body {
+            font-family: var(--font);
+            background: var(--dark-bg);
+            color: var(--neon-white);
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            position: relative;
+        }
+
+        /* ===== CANVAS ===== */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ===== APP SHELL ===== */
+        .app-shell {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: var(--sidebar-w);
+            min-width: var(--sidebar-w);
+            height: 100%;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            backdrop-filter: blur(20px);
+            overflow-y: auto;
+            overflow-x: hidden;
+            transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 1.2rem 1.2rem 0.8rem 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--neon-green);
+            text-decoration: none;
+            letter-spacing: -0.3px;
+        }
+        .sidebar-logo .sub {
+            font-weight: 300;
+            color: rgba(232, 232, 240, 0.45);
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .sidebar-search-wrap {
+            padding: 0.8rem 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .sidebar-search-wrap input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 25px;
+            padding: 0.55rem 1rem 0.55rem 2.2rem;
+            color: var(--neon-white);
+            font-family: var(--font);
+            font-size: 0.82rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        .sidebar-search-wrap input:focus {
+            border-color: var(--neon-green-glow);
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.05);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .sidebar-search-wrap {
+            position: relative;
+        }
+        .sidebar-search-wrap .search-icon {
+            position: absolute;
+            left: 1.6rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.85rem;
+            color: rgba(232, 232, 240, 0.3);
+            pointer-events: none;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.4rem 0.6rem 1rem 0.6rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .sidebar-nav .nav-section-title {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(232, 232, 240, 0.2);
+            padding: 0.7rem 0.6rem 0.3rem 0.6rem;
+            font-weight: 700;
+        }
+
+        .sidebar-nav button {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: none;
+            color: rgba(232, 232, 240, 0.55);
+            font-family: var(--font);
+            font-size: 0.8rem;
+            padding: 0.5rem 0.7rem;
+            border-radius: var(--radius-xs);
+            cursor: pointer;
+            transition: 0.22s;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+        .sidebar-nav button:hover {
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--neon-white);
+        }
+        .sidebar-nav button.active {
+            background: var(--neon-green-dim);
+            color: var(--neon-green);
+            font-weight: 700;
+            box-shadow: inset 0 0 0 1px rgba(0, 255, 136, 0.1);
+        }
+        .sidebar-nav button .badge-cnt {
+            margin-left: auto;
+            font-size: 0.6rem;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 0.15rem 0.5rem;
+            border-radius: 15px;
+            color: rgba(232, 232, 240, 0.3);
+            font-weight: 600;
+        }
+        .sidebar-nav button.active .badge-cnt {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--neon-green);
+        }
+
+        .sidebar-footer {
+            padding: 0.8rem 1.2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            flex-shrink: 0;
+            font-size: 0.6rem;
+            color: rgba(232, 232, 240, 0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .sidebar-footer .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse-dot 2s infinite;
+        }
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                opacity: 0.4;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .main-top-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.6rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            flex-shrink: 0;
+            background: rgba(10, 10, 20, 0.7);
+            backdrop-filter: blur(12px);
+            min-height: var(--header-h);
+            flex-wrap: wrap;
+        }
+
+        .main-top-bar .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            color: rgba(232, 232, 240, 0.35);
+            font-weight: 500;
+        }
+        .main-top-bar .breadcrumb .active-bread {
+            color: var(--neon-white);
+            font-weight: 700;
+        }
+        .main-top-bar .breadcrumb .sep {
+            color: rgba(232, 232, 240, 0.15);
+        }
+
+        .main-top-bar .actions-row {
+            margin-left: auto;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .main-top-bar .actions-row button {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: rgba(232, 232, 240, 0.55);
+            padding: 0.35rem 0.9rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: var(--font);
+            font-size: 0.7rem;
+            transition: 0.25s;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+        .main-top-bar .actions-row button:hover {
+            border-color: var(--neon-green-glow);
+            color: var(--neon-white);
+            background: rgba(0, 255, 136, 0.03);
+        }
+        .main-top-bar .actions-row button.fav-active {
+            border-color: rgba(255, 215, 0, 0.3);
+            color: #ffd700;
+            background: rgba(255, 215, 0, 0.04);
+        }
+
+        .main-scroll {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 1.2rem 1.5rem 1.5rem 1.5rem;
+            scroll-behavior: smooth;
+        }
+
+        /* ===== COMMAND LIST ===== */
+        .command-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .command-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 1.1rem 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            min-height: 130px;
+        }
+        .command-card:hover {
+            background: var(--card-hover-bg);
+            border-color: var(--glass-border-strong);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 60px rgba(0, 255, 136, 0.03);
+        }
+        .command-card .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+        .command-card .card-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .command-card .card-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--neon-white);
+            line-height: 1.3;
+        }
+        .command-card .card-cat-tag {
+            font-size: 0.58rem;
+            padding: 0.15rem 0.55rem;
+            border-radius: 12px;
+            background: var(--neon-blue-dim);
+            border: 1px solid rgba(79, 195, 247, 0.1);
+            color: var(--neon-blue);
+            white-space: nowrap;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .command-card .card-syntax-preview {
+            font-family: 'Courier New', monospace;
+            font-size: 0.78rem;
+            background: #141424;
+            padding: 0.5rem 0.7rem;
+            border-radius: var(--radius-xs);
+            color: #b0d0ff;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            border-left: 3px solid var(--neon-green);
+        }
+        .command-card .card-desc {
+            font-size: 0.78rem;
+            color: rgba(232, 232, 240, 0.5);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .command-card .card-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 0.4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        .command-card .card-actions button {
+            background: transparent;
+            border: none;
+            color: rgba(232, 232, 240, 0.25);
+            font-size: 0.7rem;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            transition: 0.25s;
+            font-family: var(--font);
+        }
+        .command-card .card-actions button:hover {
+            color: var(--neon-green);
+            background: rgba(0, 255, 136, 0.04);
+        }
+        .command-card .card-actions button.fav-btn.saved {
+            color: #ffd700;
+        }
+
+        /* ===== WORKSHOP STYLES ===== */
+        .workshop-container {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            gap: 1rem;
+        }
+
+        .workshop-container.active {
+            display: flex;
+        }
+
+        .workshop-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .workshop-challenge-selector {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .workshop-challenge-selector button {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            color: var(--neon-white);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: var(--font);
+            font-size: 0.75rem;
+            transition: 0.2s;
+        }
+
+        .workshop-challenge-selector button.active {
+            background: var(--neon-blue-dim);
+            border-color: var(--neon-blue);
+            color: var(--neon-blue);
+        }
+
+        .workshop-challenge-selector button:hover {
+            border-color: var(--neon-green-glow);
+            color: var(--neon-white);
+        }
+
+        .workshop-editor-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 300px;
+            gap: 0.8rem;
+        }
+
+        .workshop-editor-container textarea {
+            width: 100%;
+            flex: 1;
+            background: #1a1a2e;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            color: var(--neon-white);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            padding: 1rem;
+            resize: vertical;
+            outline: none;
+            min-height: 200px;
+        }
+
+        .workshop-editor-container textarea:focus {
+            border-color: var(--neon-green-glow);
+        }
+
+        .workshop-actions {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .workshop-actions button {
+            background: var(--neon-green-dim);
+            border: 1px solid var(--neon-green-glow);
+            color: var(--neon-green);
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: var(--font);
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .workshop-actions button:hover {
+            background: var(--neon-green);
+            color: var(--dark-bg);
+        }
+
+        .workshop-actions button.secondary {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.08);
+            color: var(--neon-white);
+        }
+
+        .workshop-actions button.secondary:hover {
+            border-color: var(--neon-white);
+        }
+
+        .workshop-output {
+            background: #0f0f1a;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            min-height: 100px;
+            max-height: 250px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #b8e0ff;
+        }
+
+        .workshop-output .error {
+            color: var(--neon-red);
+        }
+
+        .workshop-output .success {
+            color: var(--neon-green);
+        }
+
+        .workshop-output .loading {
+            color: var(--neon-blue);
+        }
+
+        .workshop-output .check-result {
+            margin-top: 0.8rem;
+            padding: 0.6rem 1rem;
+            border-radius: var(--radius-xs);
+            font-weight: 600;
+        }
+
+        .workshop-output .check-result.passed {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+        }
+
+        .workshop-output .check-result.failed {
+            background: rgba(255, 56, 96, 0.1);
+            border: 1px solid var(--neon-red);
+            color: var(--neon-red);
+        }
+
+        .workshop-description {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            color: rgba(232, 232, 240, 0.8);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .workshop-description strong {
+            color: var(--neon-white);
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem 1rem;
+            color: rgba(232, 232, 240, 0.18);
+        }
+        .empty-state .icon {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 0.6rem;
+        }
+        .empty-state .sub {
+            font-size: 0.8rem;
+            color: rgba(232, 232, 240, 0.12);
+            margin-top: 0.3rem;
+        }
+
+        /* ===== DETAIL MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            animation: fadeIn 0.2s ease-out;
+        }
+        .modal-overlay.closing {
+            animation: fadeOut 0.2s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        .modal-card {
+            background: #12121f;
+            border: 1px solid var(--glass-border-strong);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 70px rgba(0, 0, 0, 0.7);
+            position: relative;
+            animation: slideUp 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .modal-card .modal-close {
+            position: absolute;
+            top: 0.8rem;
+            right: 1rem;
+            background: transparent;
+            border: none;
+            color: rgba(232, 232, 240, 0.4);
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: 0.3s;
+            padding: 0.3rem 0.6rem;
+            border-radius: 50%;
+        }
+        .modal-card .modal-close:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .modal-card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 0.4rem;
+            color: var(--neon-white);
+        }
+        .modal-card .modal-syntax {
+            background: #1a1a2e;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #b8e0ff;
+            white-space: pre-wrap;
+            margin: 0.8rem 0;
+            cursor: pointer;
+            position: relative;
+            border-left: 3px solid var(--neon-green);
+        }
+        .modal-card .modal-example {
+            background: #1e2a1e;
+            padding: 0.7rem 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.82rem;
+            color: #b8ffb8;
+            border-left: 3px solid #4caf50;
+            margin: 0.5rem 0;
+        }
+        .modal-card .modal-desc {
+            color: rgba(232, 232, 240, 0.6);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        /* ===== MOBILE BOTTOM NAV ===== */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--bottom-nav-h);
+            background: rgba(10, 10, 20, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            z-index: 200;
+            backdrop-filter: blur(20px);
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 0.5rem;
+            padding-bottom: env(safe-area-inset-bottom, 0);
+        }
+        .bottom-nav button {
+            background: transparent;
+            border: none;
+            color: rgba(232, 232, 240, 0.35);
+            font-family: var(--font);
+            font-size: 0.6rem;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 12px;
+            transition: 0.25s;
+            font-weight: 600;
+        }
+        .bottom-nav button .nav-icon {
+            font-size: 1.3rem;
+        }
+        .bottom-nav button.active {
+            color: var(--neon-green);
+        }
+
+        /* ===== SIDEBAR OVERLAY (mobile) ===== */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 99;
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 5rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(18, 18, 30, 0.95);
+            border: 1px solid var(--glass-border-strong);
+            border-radius: 25px;
+            padding: 0.6rem 1.6rem;
+            backdrop-filter: blur(16px);
+            color: var(--neon-white);
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 99999;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .toast.success {
+            border-color: var(--neon-green);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                height: 100%;
+                transform: translateX(-105%);
+                box-shadow: 8px 0 40px rgba(0, 0, 0, 0.5);
+                width: 280px;
+                min-width: 280px;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .sidebar-overlay.show {
+                display: block;
+            }
+            .main-content {
+                width: 100%;
+            }
+            .main-scroll {
+                padding: 0.8rem 0.8rem 5rem 0.8rem;
+            }
+            .main-top-bar {
+                padding: 0.5rem 0.8rem;
+                gap: 0.5rem;
+            }
+            .bottom-nav {
+                display: flex;
+            }
+            .command-list {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.7rem;
+            }
+            .command-card {
+                padding: 0.8rem 0.9rem;
+                min-height: 110px;
+            }
+            .command-card .card-name {
+                font-size: 0.82rem;
+            }
+            .command-card .card-syntax-preview {
+                font-size: 0.7rem;
+            }
+            .command-card .card-desc {
+                font-size: 0.7rem;
+            }
+            .main-top-bar .actions-row button {
+                font-size: 0.65rem;
+                padding: 0.3rem 0.7rem;
+            }
+            .hamburger-btn {
+                display: flex !important;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .command-list {
+                grid-template-columns: 1fr;
+            }
+            .main-scroll {
+                padding: 0.6rem 0.6rem 5rem 0.6rem;
+            }
+        }
+
+        .hamburger-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--neon-white);
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 0.3rem 0.5rem;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        .hamburger-btn:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 136, 0.2);
+            border-radius: 10px;
+        }
+
+        /* Utility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- ===== APP SHELL ===== -->
+    <div class="app-shell" id="app-shell">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="#" class="sidebar-logo" onclick="resetToBrowse()">
+                    🐍 Pyhub
+                    <span class="sub">Reference &amp; Workshop</span>
+                </a>
+            </div>
+            <div class="sidebar-search-wrap">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="sidebar-search" placeholder="Search commands..." oninput="onSidebarSearch()" />
+            </div>
+            <nav class="sidebar-nav" id="sidebar-nav">
+                <div class="nav-section-title">📂 Categories</div>
+                <button data-cat="all" class="active" onclick="selectCategory('all', this)">
+                    📘 All Commands <span class="badge-cnt" id="badge-all">0</span>
+                </button>
+                <button data-cat="__favorites__" onclick="selectCategory('__favorites__', this)">
+                    ⭐ Favorites <span class="badge-cnt" id="badge-fav">0</span>
+                </button>
+                <div class="nav-section-title" style="margin-top:0.3rem;">🔧 Tools</div>
+                <button data-cat="__workshop__" onclick="openWorkshop(this)">
+                    🧪 Work (Workshop)
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <span><span class="dot"></span> Offline Ready</span>
+                <span>v2.1</span>
+            </div>
+        </aside>
+
+        <!-- SIDEBAR OVERLAY -->
+        <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+        <!-- MAIN -->
+        <main class="main-content" id="main-content">
+            <div class="main-top-bar">
+                <button class="hamburger-btn" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+                <div class="breadcrumb" id="breadcrumb">
+                    <span>📘</span>
+                    <span class="active-bread" id="breadcrumb-label">All Commands</span>
+                </div>
+                <div class="actions-row">
+                    <button onclick="exportJSON()" title="Export as JSON">📤 JSON</button>
+                    <button onclick="exportCSV()" title="Export as CSV">📤 CSV</button>
+                    <button id="toggle-fav-view" onclick="toggleFavoritesView()" title="Show favorites">⭐ Favorites</button>
+                </div>
+            </div>
+            <div class="main-scroll" id="main-scroll">
+                <!-- COMMAND LIST -->
+                <div class="command-list" id="command-list"></div>
+                <!-- WORKSHOP CONTAINER -->
+                <div class="workshop-container" id="workshop-container">
+                    <div class="workshop-header">
+                        <h2 style="color:var(--neon-green); font-weight:800;">🧪 Python Workshop</h2>
+                        <div class="workshop-challenge-selector" id="challenge-buttons"></div>
+                    </div>
+                    <div class="workshop-description" id="workshop-description">
+                        Select a challenge and write your code. Click <strong>Run</strong> to test it. Click <strong>Check Solution</strong> to verify against expected output.
+                    </div>
+                    <div class="workshop-editor-container">
+                        <textarea id="workshop-code" spellcheck="false" placeholder="# Write your Python code here..."></textarea>
+                        <div class="workshop-actions">
+                            <button onclick="runWorkshopCode()">▶ Run Code</button>
+                            <button class="secondary" onclick="checkWorkshopSolution()">✔ Check Solution</button>
+                            <button class="secondary" onclick="resetWorkshopCode()">↺ Reset</button>
+                            <span id="workshop-status" style="font-size:0.8rem;color:rgba(232,232,240,0.5);margin-left:auto;"></span>
+                        </div>
+                    </div>
+                    <div class="workshop-output" id="workshop-output">
+                        <span style="color:rgba(232,232,240,0.3);">Output will appear here...</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- BOTTOM NAV (Mobile) -->
+        <nav class="bottom-nav" id="bottom-nav">
+            <button class="active" data-view="browse" onclick="bottomNavAction('browse', this)">
+                <span class="nav-icon">📘</span> Browse
+            </button>
+            <button data-view="search" onclick="bottomNavAction('search', this)">
+                <span class="nav-icon">🔍</span> Search
+            </button>
+            <button data-view="favorites" onclick="bottomNavAction('favorites', this)">
+                <span class="nav-icon">⭐</span> Favorites
+            </button>
+            <button data-view="workshop" onclick="bottomNavAction('workshop', this)">
+                <span class="nav-icon">🧪</span> Work
+            </button>
+            <button data-view="menu" onclick="toggleSidebar()">
+                <span class="nav-icon">☰</span> Menu
+            </button>
+        </nav>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <!-- MODAL -->
+    <div id="modal-container"></div>
+
+    <!-- PYODIDE SCRIPT -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ============ PARTICLES ============
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            let W, H, particles = [];
+            const PARTICLE_COUNT = 80;
+            const COLORS = ['rgba(0,255,136,', 'rgba(79,195,247,', 'rgba(232,232,240,'];
+
+            class Particle {
+                constructor() { this.reset(); }
+                reset() {
+                    this.x = Math.random() * W;
+                    this.y = Math.random() * H;
+                    this.size = Math.random() * 2 + 0.4;
+                    this.speedX = (Math.random() - 0.5) * 0.4;
+                    this.speedY = (Math.random() - 0.5) * 0.4;
+                    this.opacity = Math.random() * 0.35 + 0.08;
+                    this.colorIdx = Math.floor(Math.random() * COLORS.length);
+                    this.pulse = Math.random() * Math.PI * 2;
+                    this.pulseSpeed = 0.005 + Math.random() * 0.01;
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    this.pulse += this.pulseSpeed;
+                    if (this.x < 0 || this.x > W) { this.speedX *= -1;
+                        this.x = Math.max(0, Math.min(W, this.x)); }
+                    if (this.y < 0 || this.y > H) { this.speedY *= -1;
+                        this.y = Math.max(0, Math.min(H, this.y)); }
+                    this.currentOpacity = this.opacity * (0.55 + 0.45 * Math.sin(this.pulse));
+                }
+                draw() {
+                    const alpha = Math.max(0.02, Math.min(0.7, this.currentOpacity));
+                    const color = COLORS[this.colorIdx] + alpha + ')';
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = color;
+                    ctx.shadowColor = color;
+                    ctx.shadowBlur = 6;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            function initParticles() {
+                particles = [];
+                for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+            }
+
+            function resizeCanvas() { W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight; }
+
+            function drawParticles() {
+                ctx.clearRect(0, 0, W, H);
+                const grad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.7);
+                grad.addColorStop(0, '#0c0c18');
+                grad.addColorStop(1, '#04040a');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, W, H);
+                particles.forEach(p => { p.update();
+                    p.draw(); });
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        const maxDist = 120;
+                        if (dist < maxDist) {
+                            const alpha = (1 - dist / maxDist) * 0.1;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = COLORS[0] + alpha + ')';
+                            ctx.lineWidth = 0.35;
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(drawParticles);
+            }
+
+            function setupParticles() {
+                resizeCanvas();
+                initParticles();
+                drawParticles();
+            }
+            window.addEventListener('resize', () => { resizeCanvas();
+                particles.forEach(p => { p.x = Math.min(p.x, W);
+                    p.y = Math.min(p.y, H); }); });
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',
+            setupParticles);
+            else setupParticles();
+
+            // ============ COMMANDS DATABASE ============
+            const COMMANDS = [
+                { cat: "Basics", name: "Variables & Assignment", syntax: "x = 5\nname = 'Python'",
+                    desc: "Create variables and assign values.", example: "age = 24" },
+                { cat: "Basics", name: "Data Types",
+                    syntax: "int(10)\nfloat(3.14)\nstr('hello')\nbool(True)",
+                    desc: "Convert or check data types.", example: "type(3.14) → <class 'float'>" },
+                { cat: "Basics", name: "Comments",
+                    syntax: "# This is a comment\n''' Multi-line comment '''",
+                    desc: "Add comments to explain code.", example: "# TODO: implement" },
+                { cat: "Basics", name: "Input / Output",
+                    syntax: "print('Hello')\nname = input('Enter name: ')",
+                    desc: "Print to console and read user input.", example: "print(f'Hello {name}')" },
+                { cat: "Strings", name: "String Methods",
+                    syntax: "s.upper()\ns.lower()\ns.replace('a','b')\ns.split(',')",
+                    desc: "Manipulate strings.", example: "'hello'.upper() → 'HELLO'" },
+                { cat: "Strings", name: "f‑strings", syntax: "f'Value is {x}'",
+                    desc: "Embed expressions in strings.", example: "f'Sum = {a + b}'" },
+                { cat: "Strings", name: "join() & split()",
+                    syntax: "','.join(['a','b'])\n'1 2 3'.split()", desc: "Combine or split strings.",
+                    example: "'-'.join(['2025','01','01']) → '2025-01-01'" },
+                { cat: "Lists", name: "List Creation",
+                    syntax: "nums = [1,2,3]\nnums.append(4)\nnums.insert(0,0)",
+                    desc: "Create and modify lists.", example: "list(range(5)) → [0,1,2,3,4]" },
+                { cat: "Lists", name: "List Comprehensions",
+                    syntax: "[x**2 for x in range(5) if x%2==0]",
+                    desc: "Create lists in one line.", example: "[i*2 for i in [1,2,3]] → [2,4,6]" },
+                { cat: "Lists", name: "Slicing", syntax: "lst[start:stop:step]",
+                    desc: "Extract sublist.", example: "[1,2,3,4][1:3] → [2,3]" },
+                { cat: "Dictionaries", name: "Dict Creation",
+                    syntax: "d = {'key': 'value'}\nd['new'] = 42",
+                    desc: "Create and modify dictionaries.",
+                example: "person = {'name':'Kia', 'age':24}" },
+                { cat: "Dictionaries", name: "Dict Methods",
+                    syntax: "d.keys()\nd.values()\nd.items()\nd.get('key')",
+                    desc: "Access dictionary keys/values.", example: "for k,v in d.items(): print(k,v)" },
+                { cat: "Dictionaries", name: "Dict Comprehensions",
+                    syntax: "{x: x**2 for x in range(3)}",
+                    desc: "Create dictionaries in one line.", example: "{i: i*2 for i in [1,2]} → {1:2, 2:4}" },
+                { cat: "Sets", name: "Set Operations",
+                    syntax: "s = {1,2,3}\ns.add(4)\ns.remove(2)\ns.union({3,4})",
+                    desc: "Work with sets (unique elements).", example: "{1,2,3} & {2,3,4} → {2,3}" },
+                { cat: "Control Flow", name: "if / elif / else",
+                    syntax: "if x > 0:\n    print('Positive')\nelif x == 0:\n    print('Zero')\nelse:\n    print('Negative')",
+                    desc: "Conditional execution.", example: "if score >= 90: grade = 'A'" },
+                { cat: "Control Flow", name: "for loop",
+                    syntax: "for i in range(5):\n    print(i)", desc: "Iterate over sequences.",
+                    example: "for item in ['a','b','c']: print(item)" },
+                { cat: "Control Flow", name: "while loop",
+                    syntax: "x = 0\nwhile x < 5:\n    print(x)\n    x += 1",
+                    desc: "Loop while condition is true.", example: "while True: break" },
+                { cat: "Control Flow", name: "break / continue",
+                    syntax: "for i in range(10):\n    if i == 5: break\n    if i % 2 == 0: continue",
+                    desc: "Exit or skip iterations.", example: "" },
+                { cat: "Functions", name: "Define Function",
+                    syntax: "def greet(name):\n    return f'Hello {name}'",
+                    desc: "Create reusable functions.", example: "result = greet('Kia')" },
+                { cat: "Functions", name: "Lambda", syntax: "square = lambda x: x**2",
+                    desc: "Anonymous one‑line function.", example: "list(map(lambda x: x*2, [1,2,3]))" },
+                { cat: "Functions", name: "*args / **kwargs",
+                    syntax: "def func(*args, **kwargs):\n    print(args, kwargs)",
+                    desc: "Variable number of arguments.", example: "func(1,2, a=3)" },
+                { cat: "Functions", name: "Decorators", syntax: "@decorator\ndef func(): pass",
+                    desc: "Modify function behavior.", example: "" },
+                { cat: "Functions", name: "Generators (yield)",
+                    syntax: "def my_gen():\n    yield 1\n    yield 2", desc: "Generate values lazily.",
+                    example: "for val in my_gen(): print(val)" },
+                { cat: "OOP", name: "Class & Object",
+                    syntax: "class MyClass:\n    def __init__(self, val):\n        self.val = val\nobj = MyClass(10)",
+                    desc: "Define classes and instantiate objects.", example: "" },
+                { cat: "OOP", name: "Inheritance",
+                    syntax: "class Child(Parent):\n    def __init__(self):\n        super().__init__()",
+                    desc: "Inherit from another class.", example: "" },
+                { cat: "OOP", name: "Property Decorator",
+                    syntax: "@property\ndef name(self):\n    return self._name",
+                    desc: "Define getters and setters.", example: "" },
+                { cat: "File I/O", name: "Read File",
+                    syntax: "with open('file.txt', 'r') as f:\n    content = f.read()",
+                    desc: "Read text from a file.", example: "" },
+                { cat: "File I/O", name: "Write File",
+                    syntax: "with open('file.txt', 'w') as f:\n    f.write('Hello')",
+                    desc: "Write text to a file.", example: "" },
+                { cat: "File I/O", name: "JSON", syntax: "import json\ndata = json.loads('{\"key\": 42}')",
+                    desc: "Parse and generate JSON.", example: "json.dumps({'a':1})" },
+                { cat: "Exception Handling", name: "try / except",
+                    syntax: "try:\n    x = 1/0\nexcept ZeroDivisionError:\n    print('Division by zero')",
+                    desc: "Handle errors gracefully.", example: "" },
+                { cat: "Exception Handling", name: "finally",
+                    syntax: "try:\n    ...\nfinally:\n    print('Always executed')",
+                    desc: "Code that runs regardless.", example: "" },
+                { cat: "Built‑in Functions", name: "len()", syntax: "len([1,2,3]) → 3",
+                    desc: "Return length of sequence.", example: "" },
+                { cat: "Built‑in Functions", name: "range()", syntax: "range(5) → [0,1,2,3,4]",
+                    desc: "Generate a sequence of numbers.", example: "for i in range(10): pass" },
+                { cat: "Built‑in Functions", name: "enumerate()",
+                    syntax: "for i, val in enumerate(['a','b']):\n    print(i, val)",
+                    desc: "Get index and value together.", example: "" },
+                { cat: "Built‑in Functions", name: "zip()",
+                    syntax: "list(zip([1,2], ['a','b'])) → [(1,'a'), (2,'b')]",
+                    desc: "Combine two or more lists.", example: "" },
+                { cat: "Built‑in Functions", name: "sorted()", syntax: "sorted([3,1,2]) → [1,2,3]",
+                    desc: "Return sorted list.", example: "" },
+                { cat: "Built‑in Functions", name: "map()",
+                    syntax: "list(map(str.upper, ['a','b'])) → ['A','B']",
+                    desc: "Apply a function to every element.", example: "" },
+                { cat: "Built‑in Functions", name: "filter()",
+                    syntax: "list(filter(lambda x: x>0, [-1,2,-3,4])) → [2,4]",
+                    desc: "Filter elements based on condition.", example: "" },
+                { cat: "Built‑in Functions", name: "sum()", syntax: "sum([1,2,3]) → 6",
+                    desc: "Sum all elements.", example: "" },
+                { cat: "Modules", name: "datetime",
+                    syntax: "from datetime import datetime\nnow = datetime.now()",
+                    desc: "Work with dates and times.", example: "now.strftime('%Y-%m-%d')" },
+                { cat: "Modules", name: "random", syntax: "import random\nrandom.randint(1,10)",
+                    desc: "Generate random numbers.", example: "random.choice(['a','b','c'])" },
+                { cat: "Modules", name: "math", syntax: "import math\nmath.sqrt(16) → 4.0",
+                    desc: "Mathematical functions.", example: "math.pi" },
+                { cat: "Modules", name: "re (Regex)",
+                    syntax: "import re\nre.findall(r'\\d+', 'a1b2c3') → ['1','2','3']",
+                    desc: "Work with regular expressions.", example: "" },
+                { cat: "Data Science", name: "pandas – DataFrame",
+                    syntax: "import pandas as pd\ndf = pd.DataFrame({'col1':[1,2], 'col2':[3,4]})",
+                    desc: "Create a DataFrame.", example: "df.head()" },
+                { cat: "Data Science", name: "pandas – Read CSV",
+                    syntax: "df = pd.read_csv('file.csv')", desc: "Load CSV into DataFrame.",
+                    example: "df.info()" },
+                { cat: "Data Science", name: "pandas – GroupBy",
+                    syntax: "df.groupby('category').mean()", desc: "Group and aggregate data.",
+                    example: "" },
+                { cat: "Data Science", name: "numpy – Array",
+                    syntax: "import numpy as np\narr = np.array([1,2,3])",
+                    desc: "Create a NumPy array.", example: "arr.shape" },
+                { cat: "Data Science", name: "numpy – Operations", syntax: "arr + 10\nnp.mean(arr)",
+                    desc: "Perform vectorized operations.", example: "np.ones((3,3))" },
+                { cat: "Data Science", name: "matplotlib – Plot",
+                    syntax: "import matplotlib.pyplot as plt\nplt.plot([1,2,3], [4,5,6])\nplt.show()",
+                    desc: "Create a simple line plot.", example: "" },
+                { cat: "Async", name: "async / await",
+                    syntax: "import asyncio\nasync def main():\n    await asyncio.sleep(1)\n    print('done')",
+                    desc: "Write asynchronous code.", example: "asyncio.run(main())" },
+                { cat: "Async", name: "asyncio.gather",
+                    syntax: "async def task():\n    ...\nawait asyncio.gather(task1(), task2())",
+                    desc: "Run multiple async tasks concurrently.", example: "" },
+                { cat: "Trading / Quant", name: "GQR – RL Environment",
+                    syntax: "import gymnasium as gym\nenv = gym.make('StockTrading-v0')",
+                    desc: "Create RL environment for trading.", example: "obs, info = env.reset()" },
+                { cat: "Trading / Quant", name: "GQR – PPO Model",
+                    syntax: "from stable_baselines3 import PPO\nmodel = PPO('MlpPolicy', env, verbose=1)",
+                    desc: "Initialize PPO agent for trading.", example: "model.learn(total_timesteps=10000)" },
+                { cat: "Trading / Quant", name: "TA‑Lib (Indicators)",
+                    syntax: "import talib\nsma = talib.SMA(close, timeperiod=14)",
+                    desc: "Technical analysis indicators.", example: "rsi = talib.RSI(close)" },
+                { cat: "AI / ML", name: "scikit‑learn – Linear Regression",
+                    syntax: "from sklearn.linear_model import LinearRegression\nmodel = LinearRegression().fit(X, y)",
+                    desc: "Simple linear regression.", example: "model.predict([[3]])" },
+                { cat: "AI / ML", name: "PyTorch – Tensor",
+                    syntax: "import torch\nt = torch.tensor([1.0, 2.0])",
+                    desc: "Create a PyTorch tensor.", example: "t.cuda()" },
+                { cat: "AI / ML", name: "TensorFlow – Sequential",
+                    syntax: "import tensorflow as tf\nmodel = tf.keras.Sequential([tf.keras.layers.Dense(1)])",
+                    desc: "Build a simple neural network.", example: "" },
+                { cat: "Network", name: "requests – GET",
+                    syntax: "import requests\nr = requests.get('https://api.example.com')",
+                    desc: "Make HTTP GET request.", example: "r.json()" },
+                { cat: "Network", name: "requests – POST",
+                    syntax: "r = requests.post('https://api.example.com', data={'key':'value'})",
+                    desc: "Make HTTP POST request.", example: "" },
+                { cat: "Database", name: "SQLite – Connect",
+                    syntax: "import sqlite3\nconn = sqlite3.connect('data.db')\ncursor = conn.cursor()",
+                    desc: "Connect to SQLite database.",
+                example: "cursor.execute('SELECT * FROM table')" },
+                { cat: "Database", name: "SQLite – Execute",
+                    syntax: "cursor.execute('INSERT INTO users VALUES (?, ?)', (1, 'name'))\nconn.commit()",
+                    desc: "Execute SQL queries.", example: "" },
+                { cat: "Advanced", name: "Context Manager (with)",
+                    syntax: "with open('file.txt') as f:\n    data = f.read()",
+                    desc: "Use context managers for resource management.", example: "" },
+                { cat: "Advanced", name: "Type Hints",
+                    syntax: "def greet(name: str) -> str:\n    return f'Hello {name}'",
+                    desc: "Add type annotations.", example: "" },
+                { cat: "Advanced", name: "Dataclasses",
+                    syntax: "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int",
+                    desc: "Simplify class definitions.", example: "p = Point(1,2)" },
+            ];
+
+            // ============ WORKSHOP CHALLENGES ============
+            const WORKSHOP_CHALLENGES = [
+                {
+                    id: 'hello',
+                    title: 'Hello, World!',
+                    description: 'Write a Python program that prints "Hello, World!" to the screen.',
+                    starterCode: '# Write your solution here\nprint("")',
+                    expectedOutput: 'Hello, World!'
+                },
+                {
+                    id: 'sum',
+                    title: 'Sum of Two Numbers',
+                    description: 'Write a Python program that calculates the sum of 10 and 20 and prints the result.',
+                    starterCode: 'a = 10\nb = 20\n# Calculate and print the sum',
+                    expectedOutput: '30'
+                },
+                {
+                    id: 'even',
+                    title: 'Even or Odd?',
+                    description: 'Write a Python program to check if the number 7 is even or odd. Print "Even" if it\'s even, "Odd" if it\'s odd.',
+                    starterCode: 'num = 7\n# Write your if-else logic here',
+                    expectedOutput: 'Odd'
+                }
+            ];
+
+            // ============ STATE ============
+            let currentCategory = 'all';
+            let searchQuery = '';
+            let favorites = new Set(JSON.parse(localStorage.getItem('pyhub_favorites') || '[]'));
+            let currentView = 'reference'; // 'reference' or 'workshop'
+            let currentChallengeId = 'hello';
+            let pyodide = null;
+            let pyodideLoaded = false;
+            let isPyodideLoading = false;
+
+            function saveFavorites() {
+                localStorage.setItem('pyhub_favorites', JSON.stringify([...favorites]));
+            }
+
+            function toggleFavorite(cmdName) {
+                if (favorites.has(cmdName)) {
+                    favorites.delete(cmdName);
+                } else {
+                    favorites.add(cmdName);
+                }
+                saveFavorites();
+                renderCommands();
+                updateSidebarBadges();
+                updateFavButtonState();
+            }
+
+            function isFavorite(cmdName) { return favorites.has(cmdName); }
+
+            function getFilteredCommands() {
+                let filtered = COMMANDS;
+                if (currentCategory === '__favorites__') {
+                    filtered = COMMANDS.filter(c => favorites.has(c.name));
+                } else if (currentCategory !== 'all') {
+                    filtered = COMMANDS.filter(c => c.cat === currentCategory);
+                }
+                if (searchQuery) {
+                    const q = searchQuery.toLowerCase();
+                    filtered = filtered.filter(c =>
+                        c.name.toLowerCase().includes(q) ||
+                        c.syntax.toLowerCase().includes(q) ||
+                        c.desc.toLowerCase().includes(q) ||
+                        c.cat.toLowerCase().includes(q)
+                    );
+                }
+                return filtered;
+            }
+
+            // ============ ICONS ============
+            function getIconForCategory(cat) {
+                const icons = {
+                    'Basics': '📘',
+                    'Strings': '🔤',
+                    'Lists': '📋',
+                    'Dictionaries': '📚',
+                    'Sets': '🔗',
+                    'Control Flow': '⚙️',
+                    'Functions': '🔧',
+                    'OOP': '🧩',
+                    'File I/O': '📂',
+                    'Exception Handling': '🚨',
+                    'Built‑in Functions': '🔢',
+                    'Modules': '📦',
+                    'Data Science': '📊',
+                    'Async': '⏳',
+                    'Trading / Quant': '💰',
+                    'AI / ML': '🤖',
+                    'Network': '🌐',
+                    'Database': '🗄️',
+                    'Advanced': '🧠'
+                };
+                return icons[cat] || '📌';
+            }
+
+            // ============ RENDER ============
+            function renderCommands() {
+                const filtered = getFilteredCommands();
+                const listEl = document.getElementById('command-list');
+                const breadcrumbLabel = document.getElementById('breadcrumb-label');
+
+                if (currentView === 'workshop') {
+                    listEl.style.display = 'none';
+                    document.getElementById('workshop-container').classList.add('active');
+                    return;
+                } else {
+                    listEl.style.display = 'grid';
+                    document.getElementById('workshop-container').classList.remove('active');
+                }
+
+                if (currentCategory === '__favorites__') {
+                    breadcrumbLabel.textContent = '⭐ Favorites';
+                } else if (currentCategory === 'all') {
+                    breadcrumbLabel.textContent = 'All Commands';
+                } else {
+                    breadcrumbLabel.textContent = currentCategory;
+                }
+
+                if (filtered.length === 0) {
+                    listEl.innerHTML = `
+                        <div class="empty-state">
+                            <span class="icon">📭</span>
+                            <p>No commands found</p>
+                            <p class="sub">Try a different category or search term</p>
+                        </div>`;
+                    return;
+                }
+
+                listEl.innerHTML = filtered.map(c => {
+                    const fav = isFavorite(c.name);
+                    return `
+                    <div class="command-card" onclick="openDetail('${c.name.replace(/'/g, "\\'")}')">
+                        <div class="card-top">
+                            <span class="card-icon">${getIconForCategory(c.cat)}</span>
+                            <span class="card-name">${c.name}</span>
+                            <span class="card-cat-tag">${c.cat}</span>
+                        </div>
+                        <div class="card-syntax-preview" onclick="event.stopPropagation(); copySyntax('${c.syntax.replace(/'/g, "\\'").replace(/\n/g, '\\n')}')" title="Click to copy syntax">${c.syntax.split('\n')[0]}</div>
+                        <div class="card-desc">${c.desc}</div>
+                        <div class="card-actions">
+                            <button onclick="event.stopPropagation(); copySyntax('${c.syntax.replace(/'/g, "\\'").replace(/\n/g, '\\n')}')" title="Copy syntax">📋 Copy</button>
+                            <button class="fav-btn${fav ? ' saved' : ''}" onclick="event.stopPropagation(); toggleFavorite('${c.name.replace(/'/g, "\\'")}')" title="${fav ? 'Remove from favorites' : 'Add to favorites'}">${fav ? '⭐' : '☆'}</button>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+
+            function updateSidebarBadges() {
+                document.getElementById('badge-all').textContent = COMMANDS.length;
+                document.getElementById('badge-fav').textContent = favorites.size;
+            }
+
+            function updateFavButtonState() {
+                const btn = document.getElementById('toggle-fav-view');
+                if (currentCategory === '__favorites__') {
+                    btn.classList.add('fav-active');
+                    btn.textContent = '⭐ Viewing Favorites';
+                } else {
+                    btn.classList.remove('fav-active');
+                    btn.textContent = '⭐ Favorites';
+                }
+            }
+
+            // ============ SIDEBAR NAV ============
+            function buildSidebarNav() {
+                const navEl = document.getElementById('sidebar-nav');
+                const categories = [...new Set(COMMANDS.map(c => c.cat))].sort();
+                let html = '<div class="nav-section-title">📂 Categories</div>';
+                html +=
+                    `<button data-cat="all" class="active" onclick="selectCategory('all', this)">📘 All Commands <span class="badge-cnt" id="badge-all">${COMMANDS.length}</span></button>`;
+                html +=
+                    `<button data-cat="__favorites__" onclick="selectCategory('__favorites__', this)">⭐ Favorites <span class="badge-cnt" id="badge-fav">${favorites.size}</span></button>`;
+                html += '<div class="nav-section-title" style="margin-top:0.3rem;">🔧 Tools</div>';
+                html +=
+                    `<button data-cat="__workshop__" onclick="openWorkshop(this)">🧪 Work (Workshop)</button>`;
+                html += '<div class="nav-section-title" style="margin-top:0.3rem;">📁 Categories</div>';
+                categories.forEach(cat => {
+                    const count = COMMANDS.filter(c => c.cat === cat).length;
+                    html +=
+                        `<button data-cat="${cat}" onclick="selectCategory('${cat}', this)">${getIconForCategory(cat)} ${cat} <span class="badge-cnt">${count}</span></button>`;
+                });
+                navEl.innerHTML = html;
+            }
+
+            function selectCategory(cat, btnEl) {
+                currentView = 'reference';
+                currentCategory = cat;
+                searchQuery = '';
+                document.getElementById('sidebar-search').value = '';
+                document.getElementById('breadcrumb-label').textContent = cat === '__favorites__' ? '⭐ Favorites' :
+                    cat === 'all' ? 'All Commands' : cat;
+                // Update active states
+                document.querySelectorAll('#sidebar-nav button').forEach(b => b.classList.remove('active'));
+                if (btnEl) btnEl.classList.add('active');
+                // Update bottom nav
+                document.querySelectorAll('#bottom-nav button[data-view]').forEach(b => b.classList.remove('active'));
+                const bottomBtn = document.querySelector(`#bottom-nav button[data-view="${cat === '__favorites__' ? 'favorites' : 'browse'}"]`);
+                if (bottomBtn) bottomBtn.classList.add('active');
+                updateFavButtonState();
+                renderCommands();
+                document.getElementById('main-scroll').scrollTop = 0;
+                // Close sidebar on mobile
+                if (window.innerWidth <= 900) closeSidebar();
+            }
+
+            function onSidebarSearch() {
+                searchQuery = document.getElementById('sidebar-search').value.trim();
+                if (searchQuery) {
+                    currentView = 'reference';
+                    currentCategory = 'all';
+                    document.querySelectorAll('#sidebar-nav button').forEach(b => b.classList.remove('active'));
+                    const allBtn = document.querySelector('#sidebar-nav button[data-cat="all"]');
+                    if (allBtn) allBtn.classList.add('active');
+                }
+                updateFavButtonState();
+                renderCommands();
+            }
+
+            function toggleFavoritesView() {
+                if (currentCategory === '__favorites__') {
+                    selectCategory('all', document.querySelector('#sidebar-nav button[data-cat="all"]'));
+                } else {
+                    selectCategory('__favorites__', document.querySelector('#sidebar-nav button[data-cat="__favorites__"]'));
+                }
+            }
+
+            function resetToBrowse() {
+                currentView = 'reference';
+                selectCategory('all', document.querySelector('#sidebar-nav button[data-cat="all"]'));
+                document.getElementById('sidebar-search').value = '';
+                searchQuery = '';
+                renderCommands();
+            }
+
+            // ============ SIDEBAR TOGGLE ============
+            function toggleSidebar() {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebar-overlay');
+                const isOpen = sidebar.classList.contains('open');
+                if (isOpen) {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('show');
+                } else {
+                    sidebar.classList.add('open');
+                    overlay.classList.add('show');
+                }
+            }
+
+            function closeSidebar() {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebar-overlay').classList.remove('show');
+            }
+
+            // ============ BOTTOM NAV ============
+            function bottomNavAction(view, btnEl) {
+                document.querySelectorAll('#bottom-nav button[data-view]').forEach(b => b.classList.remove(
+                'active'));
+                if (btnEl) btnEl.classList.add('active');
+
+                switch (view) {
+                    case 'browse':
+                        selectCategory('all', document.querySelector('#sidebar-nav button[data-cat="all"]'));
+                        break;
+                    case 'search':
+                        document.getElementById('sidebar-search').focus();
+                        if (window.innerWidth <= 900) {
+                            toggleSidebar();
+                            setTimeout(() => document.getElementById('sidebar-search').focus(), 350);
+                        }
+                        break;
+                    case 'favorites':
+                        selectCategory('__favorites__', document.querySelector(
+                            '#sidebar-nav button[data-cat="__favorites__"]'));
+                        break;
+                    case 'workshop':
+                        openWorkshop(document.querySelector('#sidebar-nav button[data-cat="__workshop__"]'));
+                        break;
+                }
+            }
+
+            // ============ WORKSHOP LOGIC ============
+            function openWorkshop(btnEl) {
+                currentView = 'workshop';
+                if (btnEl) {
+                    document.querySelectorAll('#sidebar-nav button').forEach(b => b.classList.remove('active'));
+                    btnEl.classList.add('active');
+                }
+                document.querySelectorAll('#bottom-nav button[data-view]').forEach(b => b.classList.remove('active'));
+                const bottomBtn = document.querySelector('#bottom-nav button[data-view="workshop"]');
+                if (bottomBtn) bottomBtn.classList.add('active');
+
+                document.getElementById('breadcrumb-label').textContent = '🧪 Work (Workshop)';
+                renderCommands(); // This will hide command list and show workshop container
+                renderWorkshopChallenge();
+                if (window.innerWidth <= 900) closeSidebar();
+            }
+
+            function renderWorkshopChallenge() {
+                const container = document.getElementById('workshop-container');
+                container.classList.add('active');
+
+                const challenge = WORKSHOP_CHALLENGES.find(c => c.id === currentChallengeId);
+                if (!challenge) return;
+
+                // Render challenge buttons
+                const btnContainer = document.getElementById('challenge-buttons');
+                btnContainer.innerHTML = WORKSHOP_CHALLENGES.map(c =>
+                    `<button data-id="${c.id}" class="${c.id === currentChallengeId ? 'active' : ''}" onclick="selectChallenge('${c.id}')">${c.title}</button>`
+                ).join('');
+
+                // Update description
+                document.getElementById('workshop-description').innerHTML = `
+                    <strong>${challenge.title}</strong><br>
+                    ${challenge.description}
+                `;
+
+                // Update code editor
+                const codeArea = document.getElementById('workshop-code');
+                if (!codeArea.value || codeArea.value.trim() === '' || codeArea.dataset.challengeId !== currentChallengeId) {
+                    codeArea.value = challenge.starterCode;
+                    codeArea.dataset.challengeId = currentChallengeId;
+                }
+
+                // Clear output
+                document.getElementById('workshop-output').innerHTML =
+                    '<span style="color:rgba(232,232,240,0.3);">Output will appear here...</span>';
+                document.getElementById('workshop-status').textContent = '';
+            }
+
+            function selectChallenge(id) {
+                currentChallengeId = id;
+                renderWorkshopChallenge();
+                // Reset code to starter
+                const challenge = WORKSHOP_CHALLENGES.find(c => c.id === id);
+                if (challenge) {
+                    document.getElementById('workshop-code').value = challenge.starterCode;
+                }
+            }
+
+            function resetWorkshopCode() {
+                const challenge = WORKSHOP_CHALLENGES.find(c => c.id === currentChallengeId);
+                if (challenge) {
+                    document.getElementById('workshop-code').value = challenge.starterCode;
+                }
+            }
+
+            // ============ PYODIDE ============
+            async function loadPyodideRuntime() {
+                if (pyodideLoaded) return;
+                if (isPyodideLoading) return;
+
+                isPyodideLoading = true;
+                const outputEl = document.getElementById('workshop-output');
+                outputEl.innerHTML = '<span class="loading">⏳ Loading Python runtime (Pyodide)... Please wait...</span>';
+
+                try {
+                    pyodide = await loadPyodide({
+                        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/',
+                    });
+                    pyodideLoaded = true;
+                    outputEl.innerHTML = '<span style="color:var(--neon-green);">✅ Python runtime loaded. Ready!</span>';
+                    setTimeout(() => {
+                        outputEl.innerHTML =
+                            '<span style="color:rgba(232,232,240,0.3);">Output will appear here...</span>';
+                    }, 1500);
+                } catch (err) {
+                    outputEl.innerHTML = `<span class="error">❌ Failed to load Python: ${err.message}</span>`;
+                } finally {
+                    isPyodideLoading = false;
+                }
+            }
+
+            async function runWorkshopCode() {
+                const code = document.getElementById('workshop-code').value;
+                const outputEl = document.getElementById('workshop-output');
+                const statusEl = document.getElementById('workshop-status');
+
+                outputEl.innerHTML = '<span class="loading">⏳ Running...</span>';
+
+                // Load Pyodide if not already loaded
+                if (!pyodideLoaded) {
+                    await loadPyodideRuntime();
+                }
+
+                if (!pyodideLoaded) {
+                    outputEl.innerHTML = '<span class="error">❌ Python runtime is not available. Please refresh and try again.</span>';
+                    return;
+                }
+
+                try {
+                    // Redirect stdout and stderr
+                    pyodide.runPython(`
+import sys
+from io import StringIO
+
+class CaptureOutput:
+    def __init__(self):
+        self.stdout = StringIO()
+        self.stderr = StringIO()
+    
+    def __enter__(self):
+        sys.stdout = self.stdout
+        sys.stderr = self.stderr
+        return self
+    
+    def __exit__(self, *args):
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
+    
+    def get_output(self):
+        return self.stdout.getvalue(), self.stderr.getvalue()
+                    `);
+
+                    // Run user code
+                    const result = pyodide.runPython(`
+with CaptureOutput() as capture:
+    try:
+${code.split('\n').map(line => `        ${line}`).join('\n')}
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+
+capture.get_output()
+                    `);
+
+                    const stdout = result[0];
+                    const stderr = result[1];
+
+                    if (stderr) {
+                        outputEl.innerHTML = `<span class="error">${stderr}</span>`;
+                    } else if (stdout) {
+                        outputEl.innerHTML = `<pre style="color:var(--neon-white);margin:0;">${stdout}</pre>`;
+                    } else {
+                        outputEl.innerHTML = '<span style="color:rgba(232,232,240,0.3);">⚠️ No output. Did you forget to use print()?</span>';
+                    }
+                    statusEl.textContent = '✅ Code executed';
+                } catch (err) {
+                    outputEl.innerHTML = `<span class="error">❌ Error: ${err.message}</span>`;
+                    statusEl.textContent = '❌ Error';
+                }
+            }
+
+            async function checkWorkshopSolution() {
+                const code = document.getElementById('workshop-code').value;
+                const outputEl = document.getElementById('workshop-output');
+                const statusEl = document.getElementById('workshop-status');
+
+                const challenge = WORKSHOP_CHALLENGES.find(c => c.id === currentChallengeId);
+                if (!challenge) return;
+
+                outputEl.innerHTML = '<span class="loading">⏳ Checking...</span>';
+
+                // Load Pyodide if not already loaded
+                if (!pyodideLoaded) {
+                    await loadPyodideRuntime();
+                }
+
+                if (!pyodideLoaded) {
+                    outputEl.innerHTML = '<span class="error">❌ Python runtime is not available. Please refresh and try again.</span>';
+                    return;
+                }
+
+                try {
+                    // Run user code and capture output
+                    const result = pyodide.runPython(`
+import sys
+from io import StringIO
+
+class CaptureOutput:
+    def __init__(self):
+        self.stdout = StringIO()
+        self.stderr = StringIO()
+    
+    def __enter__(self):
+        sys.stdout = self.stdout
+        sys.stderr = self.stderr
+        return self
+    
+    def __exit__(self, *args):
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
+    
+    def get_output(self):
+        return self.stdout.getvalue(), self.stderr.getvalue()
+
+with CaptureOutput() as capture:
+    try:
+${code.split('\n').map(line => `        ${line}`).join('\n')}
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+
+capture.get_output()
+                    `);
+
+                    const stdout = result[0].trim();
+                    const stderr = result[1].trim();
+
+                    if (stderr) {
+                        outputEl.innerHTML = `<span class="error">${stderr}</span>`;
+                        statusEl.textContent = '❌ Error';
+                        return;
+                    }
+
+                    const expected = challenge.expectedOutput.trim();
+
+                    if (stdout === expected) {
+                        outputEl.innerHTML = `
+                            <div class="check-result passed">✅ Correct! Your output matches the expected output.</div>
+                            <pre style="color:var(--neon-green);margin-top:0.5rem;">${stdout}</pre>
+                        `;
+                        statusEl.textContent = '✔ Passed';
+                    } else {
+                        outputEl.innerHTML = `
+                            <div class="check-result failed">❌ Incorrect. Expected: "${expected}" but got: "${stdout}"</div>
+                            <div style="margin-top:0.5rem;color:rgba(232,232,240,0.5);font-size:0.8rem;">Your output: <pre style="color:var(--neon-red);display:inline;">${stdout || '(empty)'}</pre></div>
+                        `;
+                        statusEl.textContent = '❌ Failed';
+                    }
+                } catch (err) {
+                    outputEl.innerHTML = `<span class="error">❌ Error: ${err.message}</span>`;
+                    statusEl.textContent = '❌ Error';
+                }
+            }
+
+            // ============ DETAIL MODAL ============
+            function openDetail(cmdName) {
+                const cmd = COMMANDS.find(c => c.name === cmdName);
+                if (!cmd) return;
+                const container = document.getElementById('modal-container');
+                const fav = isFavorite(cmd.name);
+                container.innerHTML = `
+                    <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+                        <div class="modal-card" onclick="event.stopPropagation()">
+                            <button class="modal-close" onclick="closeModalDirect()">✕</button>
+                            <span style="font-size:2rem;">${getIconForCategory(cmd.cat)}</span>
+                            <h2>${cmd.name} <span style="font-size:0.65rem;color:var(--neon-blue);font-weight:400;">${cmd.cat}</span></h2>
+                            <p class="modal-desc">${cmd.desc}</p>
+                            <div class="modal-syntax" onclick="copySyntax('${cmd.syntax.replace(/'/g, "\\'").replace(/\n/g, '\\n')}')" title="Click to copy">${cmd.syntax}</div>
+                            ${cmd.example ? `<div class="modal-example">Example: ${cmd.example}</div>` : ''}
+                            <div style="display:flex;gap:0.8rem;margin-top:1rem;flex-wrap:wrap;">
+                                <button onclick="copySyntax('${cmd.syntax.replace(/'/g, "\\'").replace(/\n/g, '\\n')}')" style="background:var(--neon-green-dim);border:1px solid var(--neon-green-glow);color:var(--neon-green);padding:0.5rem 1.2rem;border-radius:25px;cursor:pointer;font-family:var(--font);font-weight:600;">📋 Copy Syntax</button>
+                                <button onclick="toggleFavorite('${cmd.name.replace(/'/g, "\\'")}'); closeModalDirect();" style="background:${fav ? 'rgba(255,215,0,0.08)' : 'transparent'};border:1px solid ${fav ? 'rgba(255,215,0,0.3)' : 'rgba(255,255,255,0.08)'};color:${fav ? '#ffd700' : 'rgba(232,232,240,0.5)'};padding:0.5rem 1.2rem;border-radius:25px;cursor:pointer;font-family:var(--font);font-weight:600;">${fav ? '⭐ Saved' : '☆ Favorite'}</button>
+                            </div>
+                        </div>
+                    </div>`;
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal(e) {
+                if (e && e.target !== document.getElementById('modal-overlay')) return;
+                closeModalDirect();
+            }
+
+            function closeModalDirect() {
+                const overlay = document.getElementById('modal-overlay');
+                if (overlay) {
+                    overlay.classList.add('closing');
+                    setTimeout(() => {
+                        document.getElementById('modal-container').innerHTML = '';
+                        document.body.style.overflow = '';
+                    }, 180);
+                }
+            }
+
+            // ============ COPY ============
+            function copySyntax(text) {
+                const decoded = text.replace(/\\n/g, '\n').replace(/\\'/g, "'");
+                navigator.clipboard.writeText(decoded).then(() => {
+                    showToast('✅ Copied to clipboard');
+                }).catch(() => {
+                    const ta = document.createElement('textarea');
+                    ta.value = decoded;
+                    ta.style.position = 'fixed';
+                    ta.style.opacity = '0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(ta);
+                    showToast('✅ Copied to clipboard');
+                });
+            }
+
+            // ============ TOAST ============
+            function showToast(msg) {
+                const toast = document.getElementById('toast');
+                toast.textContent = msg;
+                toast.className = 'toast success';
+                toast.classList.add('show');
+                clearTimeout(toast._timeout);
+                toast._timeout = setTimeout(() => toast.classList.remove('show'), 2200);
+            }
+
+            // ============ EXPORT ============
+            function exportJSON() {
+                const data = COMMANDS;
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `pyhub_commands_${new Date().toISOString().slice(0,10)}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('📤 JSON exported');
+            }
+
+            function exportCSV() {
+                const headers = ['Category', 'Name', 'Syntax', 'Description', 'Example'];
+                const rows = COMMANDS.map(c => [
+                    c.cat,
+                    c.name,
+                    c.syntax.replace(/\n/g, '\\n'),
+                    c.desc,
+                    c.example || ''
+                ]);
+                const csvContent = '\uFEFF' + headers.join(',') + '\n' +
+                    rows.map(row => row.map(v => `"${v.replace(/"/g, '""')}"`).join(',')).join('\n');
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `pyhub_commands_${new Date().toISOString().slice(0,10)}.csv`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('📤 CSV exported');
+            }
+
+            // ============ KEYBOARD ============
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeModalDirect();
+                    closeSidebar();
+                }
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    document.getElementById('sidebar-search').focus();
+                }
+            });
+
+            // ============ INIT ============
+            function init() {
+                buildSidebarNav();
+                updateSidebarBadges();
+                updateFavButtonState();
+                renderCommands();
+                // Set initial bottom nav active
+                const browseBtn = document.querySelector('#bottom-nav button[data-view="browse"]');
+                if (browseBtn) browseBtn.classList.add('active');
+                console.log('🚀 Pyhub Pro v2.1 · Reference & Workshop');
+            }
+
+            // Expose globally
+            window.selectCategory = selectCategory;
+            window.onSidebarSearch = onSidebarSearch;
+            window.toggleSidebar = toggleSidebar;
+            window.closeSidebar = closeSidebar;
+            window.bottomNavAction = bottomNavAction;
+            window.openDetail = openDetail;
+            window.closeModal = closeModal;
+            window.closeModalDirect = closeModalDirect;
+            window.copySyntax = copySyntax;
+            window.toggleFavorite = toggleFavorite;
+            window.toggleFavoritesView = toggleFavoritesView;
+            window.resetToBrowse = resetToBrowse;
+            window.exportJSON = exportJSON;
+            window.exportCSV = exportCSV;
+
+            // Workshop functions
+            window.openWorkshop = openWorkshop;
+            window.selectChallenge = selectChallenge;
+            window.resetWorkshopCode = resetWorkshopCode;
+            window.runWorkshopCode = runWorkshopCode;
+            window.checkWorkshopSolution = checkWorkshopSolution;
+            window.loadPyodideRuntime = loadPyodideRuntime;
+
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+            else init();
+
+            // Service Worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/service-worker.js').catch(() => {});
+            }
+        })();
+    </script>
+</body>
+</html>
