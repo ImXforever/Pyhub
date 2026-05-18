@@ -1,0 +1,48 @@
+{
+  "name": "Pyhub · Python Reference & Workshop",
+  "short_name": "Pyhub",
+  "description": "Your complete Python reference ecosystem — commands, favorites, search, export, and workshop in one place.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0a0a14",
+  "background_color": "#0a0a14",
+  "categories": ["education", "reference", "programming"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Online Workshop",
+      "short_name": "Workshop",
+      "description": "Launch the interactive Python workshop",
+      "url": "index_online.html",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Offline Reference",
+      "short_name": "Reference",
+      "description": "Browse Python commands offline",
+      "url": "index_offline.html",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "handle_links": "preferred"
+}
